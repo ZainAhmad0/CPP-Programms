@@ -32,7 +32,7 @@ public:
 
                         cout << arr[i] << "   ";
                 }
-                cout << "\nDefault destructor is executed perfectly" << endl;
+                cout << "\nDefault destructorr is executed perfectly" << endl;
         }
 
         int add()
