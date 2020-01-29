@@ -44,7 +44,7 @@ public:
                 return sum;
         }
 };
-
+// This was the quetion which sir naeem gave us in the paper and i did it right but ... sir naeem rocks.
 void finder(int aa = 0)
 {
 
@@ -72,6 +72,7 @@ int main()
         cout << endl
              << endl
              << endl;
+             // and now alhamdulillah;) i did it ..
 
   
 }
