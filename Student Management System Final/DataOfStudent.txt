@@ -1,0 +1,7 @@
+
+45
+Student Name: za
+Student Department: baheia
+Student University: bahria
+Student CGPA: 3.4
+Student Semester: 3
