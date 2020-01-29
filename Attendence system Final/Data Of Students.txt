@@ -1,0 +1,60 @@
+1
+Student Name: Zain
+Student Department: rew
+Student University: wre
+Student CGPA: 4
+Student Semester: 3
+2
+Student Name: Ahmad
+Student Department: dfs
+Student University: dfs
+Student CGPA: 3
+Student Semester: 2
+3
+Student Name: Ali
+Student Department: rew
+Student University: wre
+Student CGPA: 4
+Student Semester: 3
+4
+Student Name: Arhsad
+Student Department: dfs
+Student University: dfs
+Student CGPA: 3
+Student Semester: 2
+5
+Student Name: Saeed
+Student Department: rew
+Student University: wre
+Student CGPA: 4
+Student Semester: 3
+34
+Student Name: Rasheed
+Student Department: dfs
+Student University: dfs
+Student CGPA: 3
+Student Semester: 2
+65
+Student Name: Rashid
+Student Department: rew
+Student University: wre
+Student CGPA: 4
+Student Semester: 3
+69
+Student Name: Rumman saeed
+Student Department: dfs
+Student University: dfs
+Student CGPA: 3
+Student Semester: 2
+76
+Student Name: Faizan
+Student Department: rew
+Student University: wre
+Student CGPA: 4
+Student Semester: 3
+324
+Student Name: ALi
+Student Department: BCE 5
+Student University: Air
+Student CGPA: 3.4
+Student Semester: 5

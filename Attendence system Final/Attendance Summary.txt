@@ -1,0 +1,13 @@
+30/12/2019
+Credit Hours Are: 3
+1: Enrollment Num: 1  Student Name: Zain     |->     p
+2: Enrollment Num: 2  Student Name: Ahmad     |->     a
+3: Enrollment Num: 3  Student Name: Ali     |->     p
+4: Enrollment Num: 4  Student Name: Arhsad     |->     a
+5: Enrollment Num: 5  Student Name: Saeed     |->     p
+6: Enrollment Num: 34  Student Name: Rasheed     |->     a
+7: Enrollment Num: 65  Student Name: Rashid     |->     p
+8: Enrollment Num: 69  Student Name: Rumman saeed     |->     a
+9: Enrollment Num: 76  Student Name: Faizan     |->     p
+10: Enrollment Num: 324  Student Name: ALi     |->     a
+*****
