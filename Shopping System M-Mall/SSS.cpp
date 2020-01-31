@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <fstream>
 
-using namespace std;
+using namespace std; 
 
 struct shopitem
 {
