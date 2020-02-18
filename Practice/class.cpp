@@ -87,7 +87,7 @@ int main()
   int addFeet,addInch;
   addFeet=feetLenth+feetWidth;
   addInch=inchWidth+inchLength;
-  dining.findParameter(&addFeet+feetWidth,&addInch);
+  dining.findParameter(&addFeet,&addInch);
   dining.dispParameter();
   return 0;
 }
