@@ -10,7 +10,7 @@ class Bahria
 {
     string nameOfMember;
     int idOFMember;
-    float cellaryOfMember;
+    float salaryOfMember;
     string designationOfMember;
     string joiningDateOfEmployee;
     float totalTax;
@@ -22,14 +22,14 @@ public:
     int getId();
     string getDesignation();
     string getJoiningDate();
-    float getCellary();
+    float getsalary();
     float getTotalTax();
     Bahria operator + (Bahria);
 };
 
 Bahria::Bahria()
 {
-    cellaryOfMember=0;
+    salaryOfMember=0;
     idOFMember=0;
     nameOfMember="";
     designationOfMember="";
@@ -39,7 +39,7 @@ Bahria::Bahria()
 
 void Bahria :: setInformation(int pay, int id, string name, string designation, string joiningDate)
 {
-    cellaryOfMember=pay;
+    salaryOfMember=pay;
     idOFMember=id;
     nameOfMember=name;
     designationOfMember=designation;
@@ -51,7 +51,7 @@ Bahria Bahria :: operator+(Bahria obj)
     cout<<"May ALLAH (SWT) Protect us from COVID-19"<<endl;
     Bahria obj1;
     float tax=0;
-    tax=obj.getCellary();
+    tax=obj.getsalary();
     tax=(tax/100)*2;  // tax of this particular employee will be calculated
     totalTax=totalTax+tax; // then the tax of this employee will be added to whole amount (total tax).
     obj1.totalTax=totalTax;
@@ -78,9 +78,9 @@ string Bahria :: getJoiningDate()
     return joiningDateOfEmployee;
 }
 
-float Bahria :: getCellary()
+float Bahria :: getsalary()
 {
-    return cellaryOfMember;
+    return salaryOfMember;
 }
 
 float Bahria :: getTotalTax()
@@ -92,9 +92,8 @@ int main()
 {
     int choice,countMembers;
     choice=countMembers=0;
-    float totalTax=0;
     int id;
-    float cellary;
+    float salary;
     string name,designation,joiningDate;
     Bahria obj[20]; // this is the total 20 employee's sir 
     cout<<"                 Welcome To Management Staff Of Bahria               "<<endl<<endl<<endl;
@@ -126,8 +125,8 @@ int main()
                 cout<<"Enter ID of employee : ";
                 cin>>id;
                 cout<<"Enter cellary of Employee : ";
-                cin>>cellary;
-                obj[countMembers++].setInformation(cellary,id,name,designation,joiningDate);
+                cin>>salary;
+                obj[countMembers++].setInformation(salary,id,name,designation,joiningDate);
                 cout<<"Employee enrolled successfully"<<endl<<endl;
             }
             else
@@ -153,7 +152,7 @@ int main()
             Bahria obj1; // this is for calculaing the tax of the total employee's sir.
             for(int count=0; count<=countMembers; count++)
             {
-                if(obj[count].getCellary()>35000)  // for each cellary greater than 35000, 2 percent tax would be applied
+                if(obj[count].getsalary()>35000)  // for each salary greater than 35000, 2 percent tax would be applied
                 {
                     obj1=obj1+obj[count];
                 }
