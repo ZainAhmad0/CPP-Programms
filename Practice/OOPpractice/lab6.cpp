@@ -2,6 +2,46 @@
 #include<iostream>
 using namespace std;
 
+class Counter
+{
+    int count;
+public:
+    Counter();
+    void operator ++ ();
+    int getCount();
+};
+Counter :: Counter()
+{
+    count=0;
+}
+void Counter :: operator++()
+{
+    count ++;
+}
+int Counter :: getCount()
+{
+    return count;
+}
+
+int main()
+{
+    cout<<"Zain Ahmad 01-131192-037"<<endl;
+    Counter c1,c2;
+    cout<<"Value of c1 : "<<c1.getCount()<<endl;
+    cout<<"Value of c2 : "<<c2.getCount()<<endl;
+    ++c1;
+    cout<<"Value of c1 after increment : "<<c1.getCount()<<endl;
+    ++c2;
+    ++c2;
+    cout<<"Value of c2 after increment : "<<c2.getCount()<<endl;
+    return 0;
+}
+*/
+
+/*
+#include<iostream>
+using namespace std;
+
 class ArithmeticOperations
 {
     int num1;
@@ -75,6 +115,7 @@ int main()
     return 0;
 }
 */
+/*
 
 #include<iostream>
 #include<string>
@@ -117,3 +158,4 @@ int main()
     cout<<"After concatenation through operator overloading "<<endl;
     cout<<joinedName<<endl;
 }
+*/
