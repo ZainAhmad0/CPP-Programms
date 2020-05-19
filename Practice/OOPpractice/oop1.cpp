@@ -1,47 +1,53 @@
 #include <iostream>
 using namespace std;
 
-class Counter
+class Shape
 {
 protected:
-    int count;
+    int width, height;
 
 public:
-    Counter()
-    {
-        count = 2;
-    }
-    Counter(int c)
-    {
-        count = c;
-    }
-    int getCount()
-    {
-        return count;
-    }
-    void operator++()
-    {
-        ++count;
-    }
+    Shape(int, int);
+    virtual int getArea();
 };
-
-class CountDn : public Counter
+int Shape ::getArea()
+{
+    return 0;
+}
+Shape ::Shape(int a = 0, int b = 0)
+{
+    width = a;
+    height = b;
+}
+class Rectangle : public Shape
 {
 public:
-    void operator--()
-    {
-        --count;
-    }
+    Rectangle(int a = 0, int b = 0) : Shape(a, b) {}
+    int getArea();
 };
+int Rectangle ::getArea()
+{
+    return width * height;
+}
+class Triangle : public Shape
+{
+public:
+    Triangle(int a = 0, int b = 0) : Shape(a, b) {}
+    int getArea();
+};
+int Triangle ::getArea()
+{
+    return (width * height / 2);
+}
+
 int main()
 {
-    CountDn c1;
-    ++c1;
-    ++c1;
-    ++c1;
-    cout <<"c1 = "<< c1.getCount();
-    --c1;
-    --c1;
-    cout << endl<<"c1 ="<< c1.getCount();
+    Shape *obj;
+    Rectangle objRec(10, 7);
+    Triangle objTri(10, 5);
+    obj = &objRec;
+    cout << "Area of Rectablge : " << obj->getArea() << endl;
+    obj = &objTri;
+    cout << "Area of Triangle : " << obj->getArea() << endl;
     return 0;
 }
