@@ -1,4 +1,6 @@
 #include <iostream>
+#include <queue> // for level order traversal through queues
+
 using namespace std;
 
 template <class N>
@@ -21,17 +23,111 @@ private:
     void inorderPrint(Node<BT> *leaf);
     void postorderPrint(Node<BT> *leaf);
     void preorderPrint(Node<BT> *leaf);
+    void levelOrderPrint(Node<BT> *leaf);
+    int sizeOfTreeThroughLevelOrderTraversal(Node<BT> *leaf);
+    BT findMax(Node<BT> *leaf);
+    BT findMin(Node<BT> *leaf);
+    int sizeOfBinaryTree(Node<BT> *leaf);
 
 public:
     BinaryTree();
     ~BinaryTree();
     void insert(BT key);
     bool search(BT key);
+    bool isEmpty();
     void destroyTree();
     void inorderPrint();
     void postorderPrint();
     void preorderPrint();
+    void levelOrderPrint();
+    BT findMax();
+    BT findMin();
+    int sizeOfBinaryTree();
+    int sizeOfTreeThroughLevelOrderTraversal();
 };
+
+template <class BT>
+int BinaryTree<BT>::sizeOfTreeThroughLevelOrderTraversal(Node<BT> *leaf)
+{
+    int count = 0;
+    Node<BT> *temp;
+    queue<Node<BT> *> objQueue;
+    if (leaf == NULL)
+        return 0;
+    objQueue.push(leaf);
+    while (!objQueue.empty())
+    {
+        temp = objQueue.front();
+        count++;
+        objQueue.pop();
+        if (temp->left != NULL)
+            objQueue.push(temp->left);
+        if (temp->right != NULL)
+            objQueue.push(temp->right);
+    }
+    return count;
+}
+
+template <class BT>
+int BinaryTree<BT>::sizeOfTreeThroughLevelOrderTraversal()
+{
+    return sizeOfTreeThroughLevelOrderTraversal(root);
+}
+
+template <class BT>
+int BinaryTree<BT>::sizeOfBinaryTree()
+{
+    return sizeOfBinaryTree(root);
+}
+
+template <class BT>
+int BinaryTree<BT>::sizeOfBinaryTree(Node<BT> *leaf)
+{
+    if (leaf == NULL)
+    {
+        return 0;
+    }
+    return (sizeOfBinaryTree(leaf->left) + 1 + sizeOfBinaryTree(leaf->right));
+    // + 1 is for root node
+}
+
+template <class BT>
+BT BinaryTree<BT>::findMax()
+{
+    return findMax(root);
+}
+
+template <class BT>
+BT BinaryTree<BT>::findMax(Node<BT> *leaf)
+{
+    if (leaf->right == NULL)
+    {
+        return leaf->value;
+    }
+    return findMax(leaf->right);
+}
+
+template <class BT>
+BT BinaryTree<BT>::findMin()
+{
+    return findMin(root);
+}
+
+template <class BT>
+BT BinaryTree<BT>::findMin(Node<BT> *leaf)
+{
+    if (leaf->left == NULL)
+    {
+        return leaf->value;
+    }
+    return findMin(leaf->left);
+}
+
+template <class BT>
+bool BinaryTree<BT>::isEmpty()
+{
+    return (root == NULL);
+}
 
 template <class BT>
 BinaryTree<BT>::BinaryTree()
@@ -52,7 +148,7 @@ void BinaryTree<BT>::insert(BT key)
     {
         insert(key, root);
     }
-    else
+    else // for the first time when there is no root so this else would be executed that time
     {
         Node<BT> *newNode = new Node<BT>();
         newNode->left = NULL;
@@ -196,25 +292,63 @@ void BinaryTree<BT>::preorderPrint(Node<BT> *leaf)
     }
 }
 
+template <class BT>
+void BinaryTree<BT>::levelOrderPrint(Node<BT> *leaf)
+{
+    Node<BT> *temp;
+    queue<Node<BT> *> objQueue;
+    if (leaf == NULL)
+        return;
+    objQueue.push(leaf);
+    while (!objQueue.empty())
+    {
+        temp = objQueue.front();
+        objQueue.pop();
+        cout << temp->value << " ";
+        if (temp->left != NULL)
+            objQueue.push(temp->left);
+        if (temp->right != NULL)
+            objQueue.push(temp->right);
+    }
+}
+
+template <class BT>
+void BinaryTree<BT>::levelOrderPrint()
+{
+    levelOrderPrint(root);
+}
+
 int main()
 {
     BinaryTree<int> obj;
     obj.insert(10);
-    obj.insert(11);
+    obj.insert(1122);
     obj.insert(1);
     obj.insert(130);
     obj.insert(101);
-    obj.inorderPrint();
-    obj.postorderPrint();
-    obj.preorderPrint();
-    if(obj.search(130))
-    {
-        cout<<"Found !"<<endl;
-    }
-    else
-    {
-        cout<<"Not Found"<<endl;
-    }
-    
+    obj.insert(0);
+    obj.insert(-234);
+    // cout<<"Size of Tree (level order traversal) is : "<<obj.sizeOfTreeThroughLevelOrderTraversal()<<endl;
+    // cout<<"Size of Tree is : "<<obj.sizeOfBinaryTree()<<endl;
+    // cout<<"Min is : "<<obj.findMin()<<endl;
+    // cout<<"Max is : "<<obj.findMax()<<endl;
+    // cout << "Inorder Traversal : ";
+    // obj.inorderPrint();
+    // cout << "Postorder Traversal : ";
+    // obj.postorderPrint();
+    // cout << "Preorder Traversal : ";
+    // obj.preorderPrint();
+    // cout << "Level Order Traversal : ";
+    // obj.levelOrderPrint();
+    // cout<<endl;
+    // if(obj.search(130))
+    // {
+    //     cout<<"Found !"<<endl;
+    // }
+    // else
+    // {
+    //     cout<<"Not Found"<<endl;
+    // }
+
     return 0;
 }
