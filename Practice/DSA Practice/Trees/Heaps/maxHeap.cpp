@@ -32,17 +32,23 @@ public:
     MaxHeap(int capacity);
     A getMaximum();
     A deleteMax();
-    void insert(A data);
     bool replaceKey(A oldData, A newData); // replace the key or node
     void insert(A data);
     ~MaxHeap(); // for destroying the heap
+    void display()
+    {
+        for (int i = 0; i < count; i++)
+        {
+            cout << array[i] << ", ";
+        }
+    }
 };
 
 template <class A>
 MaxHeap<A>::MaxHeap(int capacity)
 {
     this->capacity = capacity;
-    array = new A[this - capacity];
+    array = new A[this->capacity];
     count = 0;
     for (int i = 0; i < this->capacity; i++)
     {
@@ -59,10 +65,10 @@ MaxHeap<A>::~MaxHeap()
 template <class A>
 int MaxHeap<A>::parent(int index)
 {
-    if (count == 0) // this means that empty heap
-        return -1;
+    if (count <= 0) // this means that empty heap
+        return 0;
     else
-        return ((index - 1) / 2);
+        return int((index - 1) / 2);
 }
 
 template <class A>
@@ -80,7 +86,7 @@ int MaxHeap<A>::rightChild(int index)
     if (count == 0) // this means that empty heap
         return -1;
     else
-        return ((index * 2) + 2)]);
+        return ((index * 2) + 2);
 }
 
 template <class A>
@@ -102,7 +108,7 @@ void MaxHeap<A>::percolateDown(int index) // Deleting an element uses PercolateD
     {
         max = left;
     }
-    else if (right != NULL && array[right] > array[left])
+    else if (right != NULL && array[right] > array[index])
     {
         max = right;
     }
@@ -114,17 +120,6 @@ void MaxHeap<A>::percolateDown(int index) // Deleting an element uses PercolateD
 }
 
 template <class A>
-void MaxHeap<A>::percolateUp(int index) // Deleting an element uses PercolateDown, and inserting an element uses PercolateUp.
-{
-    int parent = parent(index);
-    if (array[index] > array[parent] &&parent ! = index)
-    {
-        swap(array[parent], array[index]);
-        percolateUp(parent);
-    }
-}
-
-template <class A>
 bool MaxHeap<A>::replaceKey(A oldData, A newData)
 {
     bool flag = false;
@@ -132,9 +127,10 @@ bool MaxHeap<A>::replaceKey(A oldData, A newData)
     {
         if (array[i] == oldData)
         {
-            array[i]=newData;
+            array[i] = newData;
+            percolateUp(i);
             percolateDown(i);
-            flag = truel
+            flag = true;
             break;
         }
     }
@@ -169,6 +165,17 @@ void MaxHeap<A>::insert(A data)
 }
 
 template <class A>
+void MaxHeap<A>::percolateUp(int index) // Deleting an element uses PercolateDown, and inserting an element uses PercolateUp.
+{
+    int parent1 = parent(index);
+    if (parent1 != index && array[index] > array[parent1])
+    {
+        swap(array[parent1], array[index]);
+        percolateUp(parent1);
+    }
+}
+
+template <class A>
 void MaxHeap<A>::resizeHeap(int capacity) // used to resize the heap when the heap is full
 {
     int *arrayOld = array;
@@ -184,4 +191,20 @@ void MaxHeap<A>::resizeHeap(int capacity) // used to resize the heap when the he
 
 int main()
 {
+    MaxHeap<int> obj(50);
+    obj.insert(70);
+    obj.insert(50);
+    obj.insert(100);
+    obj.insert(30);
+    obj.insert(60);
+    obj.insert(80);
+    obj.insert(110);
+
+    obj.display();
+    cout<<endl;
+    // obj.deleteMax();
+    // obj.display();
+    // obj.replaceKey(100,1);
+    obj.display();
+    return 0;
 }
