@@ -35,7 +35,8 @@ public:
     bool replaceKey(A oldData, A newData); // replace the key or node
     void insert(A data);
     ~MaxHeap(); // for destroying the heap
-    void display()
+    void heapSort();
+    void display() // just for own purposr of seeing heep array contents
     {
         for (int i = 0; i < count; i++)
         {
@@ -95,7 +96,7 @@ A MaxHeap<A>::getMaximum()
     if (count == 0) // this means that empty heap
         return -1;
     else
-        return (0); // because the maximum element of the heap is at root so arr[0] would be the maximum
+        return (array[0]); // because the maximum element of the heap is at root so arr[0] would be the maximum
 }
 
 template <class A>
@@ -108,7 +109,7 @@ void MaxHeap<A>::percolateDown(int index) // Deleting an element uses PercolateD
     {
         max = left;
     }
-    else if (right != NULL && array[right] > array[index])
+    if (right != NULL && array[right] > array[left]&& array[right] > array[index])
     {
         max = right;
     }
@@ -117,6 +118,40 @@ void MaxHeap<A>::percolateDown(int index) // Deleting an element uses PercolateD
         swap(array[index], array[max]);
         percolateDown(max);
     }
+}
+
+template <class A>
+A MaxHeap<A>::deleteMax()
+{
+    if (count == 0)
+    {
+        cout << "Empty heap" << endl;
+        return NULL;
+    }
+    A tempData = array[0];
+    count--;
+    array[0] = array[count];
+    array[count] = NULL;
+    percolateDown(0); // from root
+    return tempData;
+}
+
+template <class A>
+void MaxHeap<A>::heapSort()
+{
+    A *sortedArray = new A[count];
+    int temp = count;
+    for (int i = temp-1; i >=0; i--)
+    {
+        sortedArray[i] = getMaximum();
+        deleteMax();
+    }
+    cout << "Sorted Elements are" << endl;
+    for (int i = 0; i < temp; i++)
+    {
+        cout << sortedArray[i] << ", ";
+    }
+    cout << endl;
 }
 
 template <class A>
@@ -135,21 +170,6 @@ bool MaxHeap<A>::replaceKey(A oldData, A newData)
         }
     }
     return flag;
-}
-
-template <class A>
-A MaxHeap<A>::deleteMax()
-{
-    if (count == 0)
-    {
-        cout << "Empty heap" << endl;
-        return NULL;
-    }
-    A tempData = array[0];
-    array[0] = array[count - 1];
-    count--;
-    percolateDown(0);
-    return tempData;
 }
 
 template <class A>
@@ -201,10 +221,11 @@ int main()
     obj.insert(110);
 
     obj.display();
-    cout<<endl;
+    cout << endl;
+    obj.heapSort();
     // obj.deleteMax();
     // obj.display();
     // obj.replaceKey(100,1);
-    obj.display();
+    // obj.display();
     return 0;
 }
