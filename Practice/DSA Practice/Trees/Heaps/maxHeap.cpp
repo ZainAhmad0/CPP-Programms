@@ -32,7 +32,7 @@ public:
     MaxHeap(int capacity);
     A getMaximum();
     A deleteMax();
-    bool replaceKey(A oldData, A newData); // replace the key or node
+    bool replaceKey(A oldData, A newData); // replace the key or node, chage priority
     void insert(A data);
     ~MaxHeap(); // for destroying the heap
     void heapSort();
@@ -109,7 +109,7 @@ void MaxHeap<A>::percolateDown(int index) // Deleting an element uses PercolateD
     {
         max = left;
     }
-    if (right != NULL && array[right] > array[left]&& array[right] > array[index])
+    if (right != NULL && array[right] > array[left] && array[right] > array[index])
     {
         max = right;
     }
@@ -141,7 +141,7 @@ void MaxHeap<A>::heapSort()
 {
     A *sortedArray = new A[count];
     int temp = count;
-    for (int i = temp-1; i >=0; i--)
+    for (int i = temp - 1; i >= 0; i--)
     {
         sortedArray[i] = getMaximum();
         deleteMax();
