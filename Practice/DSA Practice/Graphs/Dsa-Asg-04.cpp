@@ -1,3 +1,16 @@
+
+//DSA Assignment No 4
+// Graph Implementation
+/*
+To:
+Sir Adeel
+By:
+1 - Zain Ahmad (01-131192-037)
+2 - Mirza Haris (01-131192-019)
+3 - Ahmed Shahzad Qayani (01-131192-003)
+Dated: 29/11/2020
+*/
+
 #include <iostream>
 using namespace std;
 
@@ -29,8 +42,9 @@ public:
     bool deleteVertex(A vertex);           // this would return true if the vertex exists otherwise false
     bool deleteEdge(A vertex1, A vertex2); // this would return true if the both the vertices exists and the edge between them exists otherwise false
     bool isEmpty();
-    Edge<A> *Adjacent(A vertex);
+    Edge<A> *Adjacent(A vertex); // to show the adjacent edges of the vertex
 };
+
 template <class A>
 Graph<A>::Graph()
 {
@@ -260,9 +274,9 @@ int main()
     obj.insertEdge('E', 'D');
     obj.insertEdge('E', 'B');
     obj.insertEdge('E', 'A');
-    // now displaying adjacent edges for checking that our graph is implemented correctly
+    // now displaying adjacent edges of the every particular vertices for checking that our graph is implemented correctly
     edgeHead = obj.Adjacent('A');
-    cout << "A -> ";
+    cout << "Adjacent edges of vertex A -> ";
     while (edgeHead != NULL)
     {
         cout << edgeHead->vertex << ", ";
@@ -270,7 +284,7 @@ int main()
     }
     cout << endl;
     edgeHead = obj.Adjacent('B');
-    cout << "B -> ";
+    cout << "Adjacent edges of vertex B -> ";
     while (edgeHead != NULL)
     {
         cout << edgeHead->vertex << ", ";
@@ -278,7 +292,7 @@ int main()
     }
     cout << endl;
     edgeHead = obj.Adjacent('C');
-    cout << "C -> ";
+    cout << "Adjacent edges of vertex C -> ";
     while (edgeHead != NULL)
     {
         cout << edgeHead->vertex << ", ";
@@ -286,7 +300,7 @@ int main()
     }
     cout << endl;
     edgeHead = obj.Adjacent('D');
-    cout << "D -> ";
+    cout << "Adjacent edges of vertex D -> ";
     while (edgeHead != NULL)
     {
         cout << edgeHead->vertex << ", ";
@@ -294,7 +308,7 @@ int main()
     }
     cout << endl;
     edgeHead = obj.Adjacent('E');
-    cout << "E -> ";
+    cout << "Adjacent edges of vertex E -> ";
     while (edgeHead != NULL)
     {
         cout << edgeHead->vertex << ", ";
