@@ -28,7 +28,7 @@ private:
     BT findMax(Node<BT> *leaf);
     BT findMin(Node<BT> *leaf);
     int sizeOfBinaryTree(Node<BT> *leaf);
-    int getHeight(Node<BT> *leaf);
+    int getHeight(Node<BT> *leaf);[]
     BT getDeepestNode(Node<BT> *leaf);
     int getNumberOfLeaves(Node<BT> *leaf);
     Node<BT>* deleteElement(Node<BT> *leaf, BT key);
