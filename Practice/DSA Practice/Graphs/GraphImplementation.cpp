@@ -5,8 +5,9 @@ in windows it runs perfectly fine
 */
 
 #include <iostream>
-#include <list>
 #include <queue>
+#include<stack>
+
 using namespace std;
 
 template <class B>
@@ -55,6 +56,44 @@ Graph<A>::Graph()
 template <class A>
 void Graph<A>::depthFirstSearch(A vertex)
 {
+    int count = 0;
+    bool checker = true;
+    stack<A> stackObj;
+    A *arr = new A[getTotalVertices()];
+    stackObj.push(vertex);
+    cout<<vertex<<", ";
+    arr[count++] = vertex;
+    while (!stackObj.empty())
+    {
+        A tempVertex = stackObj.top();
+        VertexNode<A> *temp = getVertexAdress(tempVertex);
+        Edge<A> *tempEdge = temp->edgeHead;
+        while (tempEdge != NULL)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                if (arr[i] == tempEdge->vertex)
+                {
+                    checker = false;
+                    break;
+                }
+            }
+            if (checker)
+            {
+                stackObj.push(tempEdge->vertex);
+                cout<<tempEdge->vertex<<", ";
+                arr[count++] = tempEdge->vertex;
+                break;
+            }
+            else if(tempEdge->next==NULL && !checker)
+            {
+                stackObj.pop();
+            }
+            checker = true;
+            tempEdge = tempEdge->next;
+        }
+    }
+    cout << endl;
 }
 
 template <class A>
@@ -346,6 +385,7 @@ int main()
     obj.insertEdge('E', 'A');
     // now displaying adjacent edges of the every particular vertices for checking that our graph is implemented correctly
     obj.breathFirstSearch('A');
+    obj.depthFirstSearch('B');
     // edgeHead = obj.Adjacent('A');
     // cout << "Adjacent edges of vertex A -> ";
     // while (edgeHead != NULL)
