@@ -39,10 +39,10 @@ public:
     bool insertEdge(A vertex1, A vertex2); // this would return true if the both the vertices exists otherwise false
     bool deleteVertex(A vertex);           // this would return true if the vertex exists otherwise false
     bool deleteEdge(A vertex1, A vertex2); // this would return true if the both the vertices exists and the edge between them exists otherwise false
-    bool isEmpty();
-    Edge<A> *Adjacent(A vertex);
-    void breathFirstSearch(A vertex);
-    void depthFirstSearch(A vertex);
+    bool isEmpty();// check wheter the graph is empty or not - contains any vertex or not
+    Edge<A> *Adjacent(A vertex); // return the edge head of all the adjacent vertices of a prticular vertex
+    void breathFirstSearch(A vertex); //uses queue
+    void depthFirstSearch(A vertex);  // uses stack for backtracking
 };
 
 template <class A>
@@ -384,8 +384,8 @@ int main()
     obj.insertEdge('E', 'B');
     obj.insertEdge('E', 'A');
     // now displaying adjacent edges of the every particular vertices for checking that our graph is implemented correctly
-    obj.breathFirstSearch('A');
-    obj.depthFirstSearch('B');
+    // obj.breathFirstSearch('A');
+    // obj.depthFirstSearch('B');
     // edgeHead = obj.Adjacent('A');
     // cout << "Adjacent edges of vertex A -> ";
     // while (edgeHead != NULL)
