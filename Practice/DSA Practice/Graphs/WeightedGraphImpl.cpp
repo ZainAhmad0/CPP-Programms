@@ -14,6 +14,7 @@ template <class B>
 struct Edge
 {
     B vertex;
+    float weight;
     Edge<B> *next;
 };
 
@@ -36,13 +37,15 @@ private:
 public:
     Graph();
     void insertVertex(A vertex);
-    bool insertEdge(A vertex1, A vertex2); // this would return true if the both the vertices exists otherwise false
-    bool deleteVertex(A vertex);           // this would return true if the vertex exists otherwise false
-    bool deleteEdge(A vertex1, A vertex2); // this would return true if the both the vertices exists and the edge between them exists otherwise false
-    bool isEmpty();// check wheter the graph is empty or not - contains any vertex or not
-    Edge<A> *Adjacent(A vertex); // return the edge head of all the adjacent vertices of a prticular vertex
-    void breathFirstSearch(A vertex); //uses queue
-    void depthFirstSearch(A vertex);  // uses stack for backtracking
+    bool insertEdge(A vertex1, A vertex2, float edgeWeight); // this would return true if the both the vertices exists otherwise false
+    bool deleteVertex(A vertex);                             // this would return true if the vertex exists otherwise false
+    bool deleteEdge(A vertex1, A vertex2);                   // this would return true if the both the vertices exists and the edge between them exists otherwise false
+    bool isEmpty();                                          // check wheter the graph is empty or not - contains any vertex or not
+    Edge<A> *Adjacent(A vertex);                             // return the edge head of all the adjacent vertices of a prticular vertex
+    void breathFirstSearch(A vertex);                        //uses queue
+    void depthFirstSearch(A vertex);                         // uses stack for backtracking
+    Graph getMSTByPrimsAlgorithm(A vertex);                  // uses prims algortim to get the minimum spanning tree
+    Graph getMSTByKruskalsAlgorithm(A vertex);               // uses kruskals algortim to get the minimum spanning tree
 };
 
 template <class A>
@@ -61,7 +64,7 @@ void Graph<A>::depthFirstSearch(A vertex)
     stack<A> stackObj;
     A *arr = new A[getTotalVertices()];
     stackObj.push(vertex);
-    cout<<vertex<<", ";
+    cout << vertex << ", ";
     arr[count++] = vertex;
     while (!stackObj.empty())
     {
@@ -81,11 +84,11 @@ void Graph<A>::depthFirstSearch(A vertex)
             if (checker)
             {
                 stackObj.push(tempEdge->vertex);
-                cout<<tempEdge->vertex<<", ";
+                cout << tempEdge->vertex << ", ";
                 arr[count++] = tempEdge->vertex;
                 break;
             }
-            else if(tempEdge->next==NULL && !checker)
+            else if (tempEdge->next == NULL && !checker)
             {
                 stackObj.pop();
             }
@@ -135,6 +138,18 @@ void Graph<A>::breathFirstSearch(A vertex)
 }
 
 template <class A>
+Graph<A> Graph<A> :: getMSTByPrimsAlgorithm(A vertex) // uses prims algortim to get the minimum spanning tree
+{
+
+}
+
+template <class A>
+Graph<A> Graph<A> :: getMSTByKruskalsAlgorithm(A vertex) // uses kruskals algortim to get the minimum spanning tree
+{
+    
+}
+
+template <class A>
 Edge<A> *Graph<A>::Adjacent(A vertex) // would return the list head of the edges
 {
     for (VertexNode<A> *temp = head; temp != NULL; temp = temp->nextVertex)
@@ -178,7 +193,7 @@ void Graph<A>::insertVertex(A vertex)
 }
 
 template <class A>
-bool Graph<A>::insertEdge(A vertexOne, A vertexTwo)
+bool Graph<A>::insertEdge(A vertexOne, A vertexTwo, float edgeWeight)
 {
     // edge from vertex-one to vertex-two would be added as well from vertex-two to vertex-one would also be added
     bool flag = false;
@@ -201,6 +216,7 @@ bool Graph<A>::insertEdge(A vertexOne, A vertexTwo)
                 Edge<A> *tempEdge = new Edge<A>;
                 tempEdge->next = NULL;
                 tempEdge->vertex = vertex;
+                tempEdge->weight = edgeWeight;
                 temp->edgeHead = tempEdge;
                 flag = true;
                 continue;
@@ -221,6 +237,7 @@ bool Graph<A>::insertEdge(A vertexOne, A vertexTwo)
                 Edge<A> *newEdge = new Edge<A>;
                 newEdge->vertex = vertex;
                 newEdge->next = NULL;
+                newEdge->weight = edgeWeight;
                 tempEdge1->next = newEdge;
                 flag = true;
                 continue;
@@ -368,63 +385,83 @@ int main()
     obj.insertVertex('C');
     obj.insertVertex('D');
     obj.insertVertex('E');
+    obj.insertVertex('F');
     // adding edges according to the given graph
-    obj.insertEdge('A', 'C');
-    obj.insertEdge('A', 'B');
-    obj.insertEdge('A', 'E');
-    obj.insertEdge('B', 'A');
-    obj.insertEdge('B', 'C');
-    obj.insertEdge('B', 'E');
-    obj.insertEdge('B', 'D');
-    obj.insertEdge('D', 'B');
-    obj.insertEdge('D', 'E');
-    obj.insertEdge('C', 'B');
-    obj.insertEdge('C', 'A');
-    obj.insertEdge('E', 'D');
-    obj.insertEdge('E', 'B');
-    obj.insertEdge('E', 'A');
+    obj.insertEdge('A', 'B', 7);
+    obj.insertEdge('A', 'C', 8);
+    obj.insertEdge('B', 'A', 7);
+    obj.insertEdge('B', 'C', 3);
+    obj.insertEdge('B', 'D', 6);
+    obj.insertEdge('C', 'A', 8);
+    obj.insertEdge('C', 'B', 3);
+    obj.insertEdge('C', 'E', 3);
+    obj.insertEdge('C', 'D', 4);
+    obj.insertEdge('D', 'B', 6);
+    obj.insertEdge('D', 'C', 4);
+    obj.insertEdge('D', 'E', 2);
+    obj.insertEdge('D', 'F', 5);
+    obj.insertEdge('E', 'C', 3);
+    obj.insertEdge('E', 'D', 2);
+    obj.insertEdge('E', 'F', 2);
+    obj.insertEdge('F', 'D', 5);
+    obj.insertEdge('F', 'E', 2);
     // now displaying adjacent edges of the every particular vertices for checking that our graph is implemented correctly
-    // obj.breathFirstSearch('A');
-    // obj.depthFirstSearch('B');
-    // edgeHead = obj.Adjacent('A');
-    // cout << "Adjacent edges of vertex A -> ";
-    // while (edgeHead != NULL)
-    // {
-    //     cout << edgeHead->vertex << ", ";
-    //     edgeHead = edgeHead->next;
-    // }
-    // cout << endl;
-    // edgeHead = obj.Adjacent('B');
-    // cout << "Adjacent edges of vertex B -> ";
-    // while (edgeHead != NULL)
-    // {
-    //     cout << edgeHead->vertex << ", ";
-    //     edgeHead = edgeHead->next;
-    // }
-    // cout << endl;
-    // edgeHead = obj.Adjacent('C');
-    // cout << "Adjacent edges of vertex C -> ";
-    // while (edgeHead != NULL)
-    // {
-    //     cout << edgeHead->vertex << ", ";
-    //     edgeHead = edgeHead->next;
-    // }
-    // cout << endl;
-    // edgeHead = obj.Adjacent('D');
-    // cout << "Adjacent edges of vertex D -> ";
-    // while (edgeHead != NULL)
-    // {
-    //     cout << edgeHead->vertex << ", ";
-    //     edgeHead = edgeHead->next;
-    // }
-    // cout << endl;
-    // edgeHead = obj.Adjacent('E');
-    // cout << "Adjacent edges of vertex E -> ";
-    // while (edgeHead != NULL)
-    // {
-    //     cout << edgeHead->vertex << ", ";
-    //     edgeHead = edgeHead->next;
-    // }
-    // cout << endl;
+    obj.breathFirstSearch('A');
+    obj.depthFirstSearch('B');
+    edgeHead = obj.Adjacent('A');
+    cout << "Adjacent edges of vertex A -> ";
+    float weight;
+    while (edgeHead != NULL)
+    {
+        cout << edgeHead->vertex << " & ";
+        cout << edgeHead->weight << " , ";
+        edgeHead = edgeHead->next;
+    }
+    cout << endl;
+    edgeHead = obj.Adjacent('B');
+    cout << "Adjacent edges of vertex B -> ";
+    while (edgeHead != NULL)
+    {
+        cout << edgeHead->vertex << " & ";
+        cout << edgeHead->weight << " , ";
+        edgeHead = edgeHead->next;
+    }
+    cout << endl;
+    edgeHead = obj.Adjacent('C');
+    cout << "Adjacent edges of vertex C -> ";
+    while (edgeHead != NULL)
+    {
+        cout << edgeHead->vertex << " & ";
+        cout << edgeHead->weight << " , ";
+        edgeHead = edgeHead->next;
+    }
+    cout << endl;
+    edgeHead = obj.Adjacent('D');
+    cout << "Adjacent edges of vertex D -> ";
+    while (edgeHead != NULL)
+    {
+        cout << edgeHead->vertex << " & ";
+        cout << edgeHead->weight << " , ";
+        edgeHead = edgeHead->next;
+    }
+    cout << endl;
+    edgeHead = obj.Adjacent('E');
+    cout << "Adjacent edges of vertex E -> ";
+    while (edgeHead != NULL)
+    {
+        cout << edgeHead->vertex << " & ";
+        cout << edgeHead->weight << " , ";
+        edgeHead = edgeHead->next;
+    }
+    cout << endl;
+    edgeHead = obj.Adjacent('F');
+    cout << "Adjacent edges of vertex F -> ";
+    while (edgeHead != NULL)
+    {
+        cout << edgeHead->vertex << " & ";
+        cout << edgeHead->weight << " , ";
+        edgeHead = edgeHead->next;
+    }
+    cout << endl;
     return 0;
 }
