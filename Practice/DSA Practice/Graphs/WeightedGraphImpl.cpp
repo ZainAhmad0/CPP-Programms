@@ -7,7 +7,7 @@ in windows it runs perfectly fine
 #include <iostream>
 #include <queue>
 #include <stack>
-
+#include <list>
 using namespace std;
 
 template <class B>
@@ -33,6 +33,7 @@ private:
     VertexNode<A> *head;
     int getTotalVertices();
     VertexNode<A> *getVertexAdress(A vertex);
+    Edge<A> *getSmallestDistantEdge(A vertex);
 
 public:
     Graph();
@@ -42,8 +43,8 @@ public:
     bool deleteEdge(A vertex1, A vertex2);                   // this would return true if the both the vertices exists and the edge between them exists otherwise false
     bool isEmpty();                                          // check wheter the graph is empty or not - contains any vertex or not
     Edge<A> *Adjacent(A vertex);                             // return the edge head of all the adjacent vertices of a prticular vertex
-    void breathFirstSearch(A vertex);                        //uses queue
-    void depthFirstSearch(A vertex);                         // uses stack for backtracking
+    list<A> breathFirstSearch(A vertex);                     // uses queue
+    void depthFirstSearch(A vertex);                      // uses stack for backtracking
     Graph getMSTByPrimsAlgorithm(A vertex);                  // uses prims algortim to get the minimum spanning tree
     Graph getMSTByKruskalsAlgorithm(A vertex);               // uses kruskals algortim to get the minimum spanning tree
 };
@@ -57,6 +58,38 @@ Graph<A>::Graph()
 }
 
 template <class A>
+Edge<A> *Graph<A>::getSmallestDistantEdge(A vertex)
+{
+    Edge<A> *temp = getVertexAdress(vertex)->edgeHead;
+    Edge<A> *temp1 = temp;
+    while (temp1 != NULL)
+    {
+        if (temp1->weight < temp->weight)
+        {
+            temp = temp1;
+        }
+        temp1->next;
+    }
+    return temp;
+}
+
+template <class A>
+Graph<A> Graph<A>::getMSTByPrimsAlgorithm(A vertex) // uses prims algortim to get the minimum spanning tree
+{
+    Graph<A> obj;
+    A *arr = new A[getTotalVertices()];
+    int counter = 0;
+    while (counter < getTotalVertices())
+    {
+    }
+}
+
+template <class A>
+Graph<A> Graph<A>::getMSTByKruskalsAlgorithm(A vertex) // uses kruskals algortim to get the minimum spanning tree
+{
+}
+
+template <class A>
 void Graph<A>::depthFirstSearch(A vertex)
 {
     int count = 0;
@@ -64,7 +97,7 @@ void Graph<A>::depthFirstSearch(A vertex)
     stack<A> stackObj;
     A *arr = new A[getTotalVertices()];
     stackObj.push(vertex);
-    cout << vertex << ", ";
+    cout << vertex << ", ";;
     arr[count++] = vertex;
     while (!stackObj.empty())
     {
@@ -100,10 +133,11 @@ void Graph<A>::depthFirstSearch(A vertex)
 }
 
 template <class A>
-void Graph<A>::breathFirstSearch(A vertex)
+list<A> Graph<A>::breathFirstSearch(A vertex)
 {
     int count = 0;
     bool checker = true;
+    list<A> objList; // this is for returning the list of vertexes that make bfs
     queue<A> queueObj;
     A *arr = new A[getTotalVertices()];
     queueObj.push(vertex);
@@ -113,7 +147,7 @@ void Graph<A>::breathFirstSearch(A vertex)
         A tempVertex = queueObj.front();
         queueObj.pop();
         VertexNode<A> *temp = getVertexAdress(tempVertex);
-        cout << tempVertex << ", ";
+        objList.push_back(tempVertex);
         Edge<A> *tempEdge = temp->edgeHead;
         while (tempEdge != NULL)
         {
@@ -134,19 +168,7 @@ void Graph<A>::breathFirstSearch(A vertex)
             tempEdge = tempEdge->next;
         }
     }
-    cout << endl;
-}
-
-template <class A>
-Graph<A> Graph<A> :: getMSTByPrimsAlgorithm(A vertex) // uses prims algortim to get the minimum spanning tree
-{
-
-}
-
-template <class A>
-Graph<A> Graph<A> :: getMSTByKruskalsAlgorithm(A vertex) // uses kruskals algortim to get the minimum spanning tree
-{
-    
+    return objList;
 }
 
 template <class A>
@@ -406,62 +428,75 @@ int main()
     obj.insertEdge('F', 'D', 5);
     obj.insertEdge('F', 'E', 2);
     // now displaying adjacent edges of the every particular vertices for checking that our graph is implemented correctly
-    obj.breathFirstSearch('A');
-    obj.depthFirstSearch('B');
-    edgeHead = obj.Adjacent('A');
-    cout << "Adjacent edges of vertex A -> ";
-    float weight;
-    while (edgeHead != NULL)
+    list<char> objList = obj.breathFirstSearch('A');
+    int size = objList.size();
+    for (int i = 0; i < size; i++)
     {
-        cout << edgeHead->vertex << " & ";
-        cout << edgeHead->weight << " , ";
-        edgeHead = edgeHead->next;
+        cout << objList.front() << ", ";
+        objList.pop_front();
     }
     cout << endl;
-    edgeHead = obj.Adjacent('B');
-    cout << "Adjacent edges of vertex B -> ";
-    while (edgeHead != NULL)
-    {
-        cout << edgeHead->vertex << " & ";
-        cout << edgeHead->weight << " , ";
-        edgeHead = edgeHead->next;
-    }
-    cout << endl;
-    edgeHead = obj.Adjacent('C');
-    cout << "Adjacent edges of vertex C -> ";
-    while (edgeHead != NULL)
-    {
-        cout << edgeHead->vertex << " & ";
-        cout << edgeHead->weight << " , ";
-        edgeHead = edgeHead->next;
-    }
-    cout << endl;
-    edgeHead = obj.Adjacent('D');
-    cout << "Adjacent edges of vertex D -> ";
-    while (edgeHead != NULL)
-    {
-        cout << edgeHead->vertex << " & ";
-        cout << edgeHead->weight << " , ";
-        edgeHead = edgeHead->next;
-    }
-    cout << endl;
-    edgeHead = obj.Adjacent('E');
-    cout << "Adjacent edges of vertex E -> ";
-    while (edgeHead != NULL)
-    {
-        cout << edgeHead->vertex << " & ";
-        cout << edgeHead->weight << " , ";
-        edgeHead = edgeHead->next;
-    }
-    cout << endl;
-    edgeHead = obj.Adjacent('F');
-    cout << "Adjacent edges of vertex F -> ";
-    while (edgeHead != NULL)
-    {
-        cout << edgeHead->vertex << " & ";
-        cout << edgeHead->weight << " , ";
-        edgeHead = edgeHead->next;
-    }
-    cout << endl;
-    return 0;
+    list<char> objList = obj.depthFirstSearch('A');
+    // size = objList1.size();
+    // for (int i = 0; i < size; i++)
+    // {
+    //     cout << objList1.front() << ", ";
+    //     objList1.pop_front();
+    // }
+    // edgeHead = obj.Adjacent('A');
+    // cout << "Adjacent edges of vertex A -> ";
+    // float weight;
+    // while (edgeHead != NULL)
+    // {
+    //     cout << edgeHead->vertex << " & ";
+    //     cout << edgeHead->weight << " , ";
+    //     edgeHead = edgeHead->next;
+    // }
+    // cout << endl;
+    // edgeHead = obj.Adjacent('B');
+    // cout << "Adjacent edges of vertex B -> ";
+    // while (edgeHead != NULL)
+    // {
+    //     cout << edgeHead->vertex << " & ";
+    //     cout << edgeHead->weight << " , ";
+    //     edgeHead = edgeHead->next;
+    // }
+    // cout << endl;
+    // edgeHead = obj.Adjacent('C');
+    // cout << "Adjacent edges of vertex C -> ";
+    // while (edgeHead != NULL)
+    // {
+    //     cout << edgeHead->vertex << " & ";
+    //     cout << edgeHead->weight << " , ";
+    //     edgeHead = edgeHead->next;
+    // }
+    // cout << endl;
+    // edgeHead = obj.Adjacent('D');
+    // cout << "Adjacent edges of vertex D -> ";
+    // while (edgeHead != NULL)
+    // {
+    //     cout << edgeHead->vertex << " & ";
+    //     cout << edgeHead->weight << " , ";
+    //     edgeHead = edgeHead->next;
+    // }
+    // cout << endl;
+    // edgeHead = obj.Adjacent('E');
+    // cout << "Adjacent edges of vertex E -> ";
+    // while (edgeHead != NULL)
+    // {
+    //     cout << edgeHead->vertex << " & ";
+    //     cout << edgeHead->weight << " , ";
+    //     edgeHead = edgeHead->next;
+    // }
+    // cout << endl;
+    // edgeHead = obj.Adjacent('F');
+    // cout << "Adjacent edges of vertex F -> ";
+    // while (edgeHead != NULL)
+    // {
+    //     cout << edgeHead->vertex << " & ";
+    //     cout << edgeHead->weight << " , ";
+    //     edgeHead = edgeHead->next;
+    // }
+    // cout << endl;
+    // return 0;
 }

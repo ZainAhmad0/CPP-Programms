@@ -7,6 +7,7 @@ in windows it runs perfectly fine
 #include <iostream>
 #include <queue>
 #include <stack>
+#include <list>
 
 using namespace std;
 
@@ -39,10 +40,10 @@ public:
     bool insertEdge(A vertex1, A vertex2); // this would return true if the both the vertices exists otherwise false
     bool deleteVertex(A vertex);           // this would return true if the vertex exists otherwise false
     bool deleteEdge(A vertex1, A vertex2); // this would return true if the both the vertices exists and the edge between them exists otherwise false
-    bool isEmpty();// check wheter the graph is empty or not - contains any vertex or not
-    Edge<A> *Adjacent(A vertex); // return the edge head of all the adjacent vertices of a prticular vertex
-    void breathFirstSearch(A vertex); //uses queue
-    void depthFirstSearch(A vertex);  // uses stack for backtracking
+    bool isEmpty();                        // check wheter the graph is empty or not - contains any vertex or not
+    Edge<A> *Adjacent(A vertex);           // return the edge head of all the adjacent vertices of a prticular vertex
+    list<A> breathFirstSearch(A vertex);   //uses queue
+    void depthFirstSearch(A vertex);       // uses stack for backtracking
 };
 
 template <class A>
@@ -61,7 +62,7 @@ void Graph<A>::depthFirstSearch(A vertex)
     stack<A> stackObj;
     A *arr = new A[getTotalVertices()];
     stackObj.push(vertex);
-    cout<<vertex<<", ";
+    cout << vertex << ", ";
     arr[count++] = vertex;
     while (!stackObj.empty())
     {
@@ -81,11 +82,11 @@ void Graph<A>::depthFirstSearch(A vertex)
             if (checker)
             {
                 stackObj.push(tempEdge->vertex);
-                cout<<tempEdge->vertex<<", ";
+                cout << tempEdge->vertex << ", ";
                 arr[count++] = tempEdge->vertex;
                 break;
             }
-            else if(tempEdge->next==NULL && !checker)
+            else if (tempEdge->next == NULL && !checker)
             {
                 stackObj.pop();
             }
@@ -97,10 +98,11 @@ void Graph<A>::depthFirstSearch(A vertex)
 }
 
 template <class A>
-void Graph<A>::breathFirstSearch(A vertex)
+list<A> Graph<A>::breathFirstSearch(A vertex)
 {
     int count = 0;
     bool checker = true;
+    list<A> objList; // this is for returning the list of vertexes that make bfs
     queue<A> queueObj;
     A *arr = new A[getTotalVertices()];
     queueObj.push(vertex);
@@ -110,7 +112,7 @@ void Graph<A>::breathFirstSearch(A vertex)
         A tempVertex = queueObj.front();
         queueObj.pop();
         VertexNode<A> *temp = getVertexAdress(tempVertex);
-        cout << tempVertex << ", ";
+        objList.push_back(tempVertex);
         Edge<A> *tempEdge = temp->edgeHead;
         while (tempEdge != NULL)
         {
@@ -131,7 +133,7 @@ void Graph<A>::breathFirstSearch(A vertex)
             tempEdge = tempEdge->next;
         }
     }
-    cout << endl;
+    return objList;
 }
 
 template <class A>
@@ -384,7 +386,14 @@ int main()
     obj.insertEdge('E', 'B');
     obj.insertEdge('E', 'A');
     // now displaying adjacent edges of the every particular vertices for checking that our graph is implemented correctly
-    // obj.breathFirstSearch('A');
+    list<char> objList = obj.breathFirstSearch('A');
+    int size = objList.size();
+    for (int i = 0; i < size; i++)
+    {
+        cout << objList.front() << ", ";
+        objList.pop_front();
+    }
+    cout << endl;
     // obj.depthFirstSearch('B');
     // edgeHead = obj.Adjacent('A');
     // cout << "Adjacent edges of vertex A -> ";
