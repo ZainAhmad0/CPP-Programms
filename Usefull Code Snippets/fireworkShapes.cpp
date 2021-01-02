@@ -45,8 +45,8 @@ int main()
     char t;
     cin >> t;
     int nextStepDirection = 1;
-    int cursorXPosition = 10;
-    int cursorYPosition = 10;
+    int cursorXPosition;
+    int cursorYPosition;
     int coordinates[20][30];
     cursorXPosition = 12;
     cursorYPosition = 12;
@@ -160,8 +160,10 @@ void stepLeft(int count, int *cursorXPosition, int *cursorYPosition, int coordin
 void printArr(int coordinates[20][30])
 {
     system("clear");  // to make it show like firework 
-    static int maxValueOfXDimension = 18;
+
+    static int maxValueOfXDimension = 20;
     static int maxValueOfYDimension = 30;
+
     /* 
     beacuse printArr function is frequently invoked everytime when we
     invoke the function because of their static behavior they donot get changed
@@ -191,3 +193,4 @@ void initializeArray(int coordinates[20][30])
         }
     }
 }
+
