@@ -41,7 +41,7 @@ public:
     bool deleteVertex(A vertex);           // this would return true if the vertex exists otherwise false
     bool deleteEdge(A vertex1, A vertex2); // this would return true if the both the vertices exists and the edge between them exists otherwise false
     bool isEmpty();                        // check wheter the graph is empty or not - contains any vertex or not
-    Edge<A> *Adjacent(A vertex);           // return the edge head of all the adjacent vertices of a prticular vertex
+    void Adjacent(A vertex);           // return the edge head of all the adjacent vertices of a prticular vertex
     list<A> breathFirstSearch(A vertex);   //uses queue
     void depthFirstSearch(A vertex);       // uses stack for backtracking
 };
@@ -137,16 +137,22 @@ list<A> Graph<A>::breathFirstSearch(A vertex)
 }
 
 template <class A>
-Edge<A> *Graph<A>::Adjacent(A vertex) // would return the list head of the edges
+void Graph<A>::Adjacent(A vertex) // would return the list head of the edges
 {
     for (VertexNode<A> *temp = head; temp != NULL; temp = temp->nextVertex)
     {
         if (temp->vertex == vertex)
         {
-            return temp->edgeHead;
+            Edge<A> *tempEdge = temp->edgeHead;
+            cout << "Adjacent edges of vertex "<<vertex<<" -> ";
+            for(Edge<A> *tempEdge = temp->edgeHead; tempEdge!=NULL; tempEdge=tempEdge->next)
+            {
+                cout<<tempEdge->vertex<<" , ";
+            }
+            break;
         }
     }
-    return NULL;
+    return ;
 }
 
 template <class A>
@@ -163,6 +169,7 @@ void Graph<A>::insertVertex(A vertex)
         VertexNode<A> *newNodeVertex = new VertexNode<A>();
         newNodeVertex->vertex = vertex;
         newNodeVertex->nextVertex = NULL;
+        newNodeVertex->edgeHead = NULL;
         head = newNodeVertex;
     }
     else
@@ -175,6 +182,7 @@ void Graph<A>::insertVertex(A vertex)
         VertexNode<A> *newNodeVertex = new VertexNode<A>();
         newNodeVertex->vertex = vertex;
         newNodeVertex->nextVertex = NULL;
+        newNodeVertex->edgeHead = NULL;
         temp->nextVertex = newNodeVertex;
     }
 }
@@ -363,7 +371,6 @@ VertexNode<A> *Graph<A>::getVertexAdress(A vertex)
 int main()
 {
     Graph<char> obj;
-    Edge<char> *edgeHead; // for displaying the list of edges
     // adding vertices
     obj.insertVertex('A');
     obj.insertVertex('B');
@@ -385,55 +392,17 @@ int main()
     obj.insertEdge('E', 'D');
     obj.insertEdge('E', 'B');
     obj.insertEdge('E', 'A');
+    cout<<"Zain Ahmda"<<endl;
+    obj.Adjacent('B');
     // now displaying adjacent edges of the every particular vertices for checking that our graph is implemented correctly
-    list<char> objList = obj.breathFirstSearch('A');
-    int size = objList.size();
-    for (int i = 0; i < size; i++)
-    {
-        cout << objList.front() << ", ";
-        objList.pop_front();
-    }
-    cout << endl;
+    // list<char> objList = obj.breathFirstSearch('A');
+    // int size = objList.size();
+    // for (int i = 0; i < size; i++)
+    // {
+    //     cout << objList.front() << ", ";
+    //     objList.pop_front();
+    // }
+    // cout << endl;
     // obj.depthFirstSearch('B');
-    // edgeHead = obj.Adjacent('A');
-    // cout << "Adjacent edges of vertex A -> ";
-    // while (edgeHead != NULL)
-    // {
-    //     cout << edgeHead->vertex << ", ";
-    //     edgeHead = edgeHead->next;
-    // }
-    // cout << endl;
-    // edgeHead = obj.Adjacent('B');
-    // cout << "Adjacent edges of vertex B -> ";
-    // while (edgeHead != NULL)
-    // {
-    //     cout << edgeHead->vertex << ", ";
-    //     edgeHead = edgeHead->next;
-    // }
-    // cout << endl;
-    // edgeHead = obj.Adjacent('C');
-    // cout << "Adjacent edges of vertex C -> ";
-    // while (edgeHead != NULL)
-    // {
-    //     cout << edgeHead->vertex << ", ";
-    //     edgeHead = edgeHead->next;
-    // }
-    // cout << endl;
-    // edgeHead = obj.Adjacent('D');
-    // cout << "Adjacent edges of vertex D -> ";
-    // while (edgeHead != NULL)
-    // {
-    //     cout << edgeHead->vertex << ", ";
-    //     edgeHead = edgeHead->next;
-    // }
-    // cout << endl;
-    // edgeHead = obj.Adjacent('E');
-    // cout << "Adjacent edges of vertex E -> ";
-    // while (edgeHead != NULL)
-    // {
-    //     cout << edgeHead->vertex << ", ";
-    //     edgeHead = edgeHead->next;
-    // }
-    // cout << endl;
     return 0;
 }

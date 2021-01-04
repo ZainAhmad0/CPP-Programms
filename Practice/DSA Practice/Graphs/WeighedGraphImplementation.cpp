@@ -8,16 +8,15 @@ in windows it runs perfectly fine
 #include <queue>
 #include <stack>
 #include <list>
-using namespace std;
 
-#define MAX 9999999999;
+using namespace std;
 
 template <class B>
 struct Edge
 {
     B vertex;
-    float weight;
     Edge<B> *next;
+    float weight;
 };
 
 template <class A>
@@ -35,9 +34,6 @@ private:
     VertexNode<A> *head;
     int getTotalVertices();
     VertexNode<A> *getVertexAdress(A vertex);
-    // Edge<A> *getSmallestDistantEdge(A vertex);
-    // void fillVertices(Graph<A> *obj);
-    bool isVertexPresent(A value);
 
 public:
     Graph();
@@ -46,24 +42,10 @@ public:
     bool deleteVertex(A vertex);                             // this would return true if the vertex exists otherwise false
     bool deleteEdge(A vertex1, A vertex2);                   // this would return true if the both the vertices exists and the edge between them exists otherwise false
     bool isEmpty();                                          // check wheter the graph is empty or not - contains any vertex or not
-    Edge<A> *Adjacent(A vertex);                             // return the edge head of all the adjacent vertices of a prticular vertex
-    list<A> breathFirstSearch(A vertex);                     // uses queue
+    void Adjacent(A vertex);                                 // return the edge head of all the adjacent vertices of a prticular vertex
+    list<A> breathFirstSearch(A vertex);                     //uses queue
     void depthFirstSearch(A vertex);                         // uses stack for backtracking
-    Graph<A> MSTbyPrim();                                    // uses prims algortim to get the minimum spanning tree
-    // Graph getMSTByPrimsAlgorithm(A vertex);                  // uses prims algortim to get the minimum spanning tree
-    Graph getMSTByKruskalsAlgorithm(A vertex); // uses kruskals algortim to get the minimum spanning tree
 };
-
-// template <class A>
-// void Graph<A>::fillVertices(Graph<A> *obj)
-// {
-//     VertexNode<A> *temp = head;
-//     while (temp != NULL)
-//     {
-//         obj->insertVertex(temp->vertex);
-//         temp = temp->nextVertex;
-//     }
-// }
 
 template <class A>
 Graph<A>::Graph()
@@ -71,146 +53,6 @@ Graph<A>::Graph()
     head->edgeHead = NULL;
     head->nextVertex = NULL;
     head = NULL;
-}
-
-template <class A>
-Graph<A> Graph<A>::MSTbyPrim()
-{
-    Graph MST;
-    bool checker = false;
-    long minimum = MAX;
-    int numOfEdges = 0;
-    VertexNode<A> *tempVertexNode;
-    Edge<A> *tempEdgeNode;
-    cout<<"Zain Ahmad"<<endl;
-    for (VertexNode<A> *tempVertex = head; tempVertex != NULL; tempVertex = tempVertex->nextVertex) //get the minimum cost edge from the whole graph
-    {
-        // for (Edge<A> *tempEdge = tempVertex->edgeHead; tempEdge != NULL; tempEdge = tempEdge->next)
-        // {
-        //     if (tempEdge->weight < minimum)
-        //     {
-        //         minimum = tempEdge->weight;
-        //         tempVertexNode = tempVertex;
-        //         tempEdgeNode = tempEdge;
-        //     }
-        // }
-    }
-    cout<<"Zain Ahmad"<<endl;
-    // MST.insertVertex(tempVertexNode->vertex); //insert the selected vertices and edges into new graph
-    // MST.insertVertex(tempEdgeNode->vertex);
-    // MST.insertEdge(tempVertexNode->vertex, tempEdgeNode->vertex, minimum);
-    // numOfEdges++;
-    // while (numOfEdges != getTotalVertices() - 1) //property of MST
-    // {
-    //     minimum = MAX;
-    //     for (VertexNode<A> *tempVertex = head; tempVertex != NULL; tempVertex = tempVertex->nextVertex)
-    //     {
-    //         if (MST.isVertexPresent(tempVertex->vertex) == true) //returns true if the vertex v in the graph is also present in the spanning tree,
-    //         {                                                    // which means that it can be "selected"
-    //             for (Edge<A> *tempEdge = tempVertex->edgeHead; tempEdge != NULL; tempEdge = tempEdge->next)
-    //             {
-    //                 if (tempEdge->weight < minimum) //returns true if the weight of the edge is less than the current minimum
-    //                 {
-    //                     if (MST.isVertexPresent(tempEdge->vertex) == false)
-    //                     { // and that vertice is not already present in the spanning tree, since vertices can't be repeated
-    //                         checker = true;
-    //                         minimum = tempEdge->weight;
-    //                         tempVertexNode = tempVertex;
-    //                         tempEdgeNode = tempEdge;
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     if (checker == true)
-    //     {
-    //         MST.insertVertex(tempEdgeNode->vertex);
-    //         MST.insertEdge(tempVertexNode->vertex, tempEdgeNode->vertex, minimum);
-    //         numOfEdges++;
-    //         checker = false;
-    //     }
-    // }
-    return MST;
-}
-
-template <class A>
-bool Graph<A>::isVertexPresent(A value)
-{
-    for (VertexNode<A> *temp = head; temp != NULL; temp = temp->nextVertex)
-    {
-        if (temp->vertex == value)
-            return true;
-    }
-    return false;
-}
-
-// template <class A>
-// Edge<A> *Graph<A>::getSmallestDistantEdge(A vertex)
-// {
-//     VertexNode<A> *temp = getVertexAdress(vertex);
-//     Edge<A> *temp2 = temp->edgeHead;
-//     Edge<A> *temp1 = temp->edgeHead;
-//     while (temp2 != NULL)
-//     {
-//         if (temp1->weight > temp2->weight)
-//         {
-//             temp1 = temp2;
-//         }
-//         temp2 = temp2->next;
-//     }
-//     return temp1;
-// }
-
-// template <class A>
-// Graph<A> Graph<A>::getMSTByPrimsAlgorithm(A vertex) // uses prims algortim to get the minimum spanning tree
-// {
-//     Graph<A> obj;
-//     long weight;
-//     obj.fillVertices(&obj);
-//     bool checker = true;
-//     A tempVertex;
-//     Edge<A> *temp, *temp1;
-//     temp = temp1 = new Edge<A>;
-//     int counter = 0;
-//     A *arr = new A[getTotalVertices()];
-//     arr[counter++] = vertex;
-//     tempVertex = arr[0];
-//     while (counter != getTotalVertices())
-//     {
-//         weight = 9999999999;
-//         for (int i = 0; i < counter; i++)
-//         {
-//             temp = getSmallestDistantEdge(arr[i]);
-//             ;
-//             for (int j = 0; j < counter; j++)
-//             {
-//                 if (arr[j] == temp->vertex)
-//                 {
-//                     checker = false;
-//                     break;
-//                 }
-//             }
-//             if (checker)
-//             {
-//                 if (temp->weight < weight)
-//                 {
-//                     temp1 = temp;
-//                     tempVertex = arr[i];
-//                     weight = temp->weight;
-//                 }
-//             }
-//             checker = true;
-//             temp = NULL;
-//         }
-//         obj.insertEdge(tempVertex, temp1->vertex, temp1->weight);
-//         arr[counter++] = temp1->vertex;
-//     }
-//     return obj;
-// }
-
-template <class A>
-Graph<A> Graph<A>::getMSTByKruskalsAlgorithm(A vertex) // uses kruskals algortim to get the minimum spanning tree
-{
 }
 
 template <class A>
@@ -222,7 +64,6 @@ void Graph<A>::depthFirstSearch(A vertex)
     A *arr = new A[getTotalVertices()];
     stackObj.push(vertex);
     cout << vertex << ", ";
-    ;
     arr[count++] = vertex;
     while (!stackObj.empty())
     {
@@ -297,16 +138,23 @@ list<A> Graph<A>::breathFirstSearch(A vertex)
 }
 
 template <class A>
-Edge<A> *Graph<A>::Adjacent(A vertex) // would return the list head of the edges
+void Graph<A>::Adjacent(A vertex) // would return the list head of the edges
 {
     for (VertexNode<A> *temp = head; temp != NULL; temp = temp->nextVertex)
     {
         if (temp->vertex == vertex)
         {
-            return temp->edgeHead;
+            Edge<A> *tempEdge = temp->edgeHead;
+            cout << "Adjacent edges of vertex " << vertex << " = ";
+            for (Edge<A> *tempEdge = temp->edgeHead; tempEdge != NULL; tempEdge = tempEdge->next)
+            {
+                cout << tempEdge->vertex << "(" << tempEdge->weight << ") ";
+            }
+            cout << endl;
+            break;
         }
     }
-    return NULL;
+    return;
 }
 
 template <class A>
@@ -323,6 +171,7 @@ void Graph<A>::insertVertex(A vertex)
         VertexNode<A> *newNodeVertex = new VertexNode<A>();
         newNodeVertex->vertex = vertex;
         newNodeVertex->nextVertex = NULL;
+        newNodeVertex->edgeHead = NULL;
         head = newNodeVertex;
     }
     else
@@ -335,6 +184,7 @@ void Graph<A>::insertVertex(A vertex)
         VertexNode<A> *newNodeVertex = new VertexNode<A>();
         newNodeVertex->vertex = vertex;
         newNodeVertex->nextVertex = NULL;
+        newNodeVertex->edgeHead = NULL;
         temp->nextVertex = newNodeVertex;
     }
 }
@@ -372,24 +222,25 @@ bool Graph<A>::insertEdge(A vertexOne, A vertexTwo, float edgeWeight)
             {
                 Edge<A> *tempEdge, *tempEdge1;
                 tempEdge1 = temp->edgeHead;
-
                 for (tempEdge = temp->edgeHead; tempEdge != NULL; tempEdge = tempEdge->next)
                 {
                     if (tempEdge->vertex == vertex)
                     {
-                        return true; // as this edge is already there in edge list so no need to duplicate the edge
+                        continue;
                     }
                     tempEdge1 = tempEdge;
                 }
-                Edge<A> *newEdge = new Edge<A>;
-                newEdge->vertex = vertex;
-                newEdge->next = NULL;
-                newEdge->weight = edgeWeight;
-                tempEdge1->next = newEdge;
-                flag = true;
-                continue;
+               
+                    Edge<A> *newEdge = new Edge<A>;
+                    newEdge->vertex = vertex;
+                    newEdge->next = NULL;
+                    newEdge->weight = edgeWeight;
+                    tempEdge1->next = newEdge;
+                    flag = true;
+                
             }
         }
+        
     }
     return flag;
 }
@@ -519,13 +370,12 @@ VertexNode<A> *Graph<A>::getVertexAdress(A vertex)
         }
         temp = temp->nextVertex;
     }
-    return temp;
+    return NULL;
 }
 
 int main()
 {
     Graph<char> obj;
-    Edge<char> *edgeHead; // for displaying the list of edges
     // adding vertices
     obj.insertVertex('A');
     obj.insertVertex('B');
@@ -536,28 +386,20 @@ int main()
     // adding edges according to the given graph
     obj.insertEdge('A', 'B', 7);
     obj.insertEdge('A', 'C', 8);
-    obj.insertEdge('B', 'A', 7);
     obj.insertEdge('B', 'C', 3);
     obj.insertEdge('B', 'D', 6);
-    obj.insertEdge('C', 'A', 8);
-    obj.insertEdge('C', 'B', 3);
     obj.insertEdge('C', 'E', 3);
     obj.insertEdge('C', 'D', 4);
-    obj.insertEdge('D', 'B', 6);
-    obj.insertEdge('D', 'C', 4);
     obj.insertEdge('D', 'E', 2);
     obj.insertEdge('D', 'F', 5);
-    obj.insertEdge('E', 'C', 3);
-    obj.insertEdge('E', 'D', 2);
     obj.insertEdge('E', 'F', 2);
-    obj.insertEdge('F', 'D', 5);
-    obj.insertEdge('F', 'E', 2);
-    // edgeHead=obj.getSmallestDistantEdge('B');
-    // cout<<edgeHead->vertex<<endl;
+    obj.Adjacent('A');
+    obj.Adjacent('B');
+    obj.Adjacent('C');
+    obj.Adjacent('D');
+    obj.Adjacent('E');
+    obj.Adjacent('F');
     // now displaying adjacent edges of the every particular vertices for checking that our graph is implemented correctly
-    // Graph<char> obj1 = obj.getMSTByPrimsAlgorithm('B');
-    Graph<char> obj1 = obj.MSTbyPrim();
-    cout << "Clear All" << endl;
     // list<char> objList = obj.breathFirstSearch('A');
     // int size = objList.size();
     // for (int i = 0; i < size; i++)
@@ -566,69 +408,6 @@ int main()
     //     objList.pop_front();
     // }
     // cout << endl;
-    // list<char> objList = obj.depthFirstSearch('A');
-    // size = objList1.size();
-    // for (int i = 0; i < size; i++)
-    // {
-    //     cout << objList1.front() << ", ";
-    //     objList1.pop_front();
-    // }
-    // edgeHead = obj1.Adjacent('A');
-    // cout << "Adjacent edges of vertex A -> ";
-    // float weight;
-    // while (edgeHead != NULL)
-    // {
-    //     cout << edgeHead->vertex << " & ";
-    //     cout << edgeHead->weight << " , ";
-    //     edgeHead = edgeHead->next;
-    // }
-    // cout << endl;
-    // edgeHead = obj1.Adjacent('B');
-    // cout << "Adjacent edges of vertex B -> ";
-    // while (edgeHead != NULL)
-    // {
-    //     cout << edgeHead->vertex << " & ";
-    //     cout << edgeHead->weight << " , ";
-    //     edgeHead = edgeHead->next;
-    // }
-    // cout << endl;
-    // edgeHead = obj1.Adjacent('C');
-    // cout << "Adjacent edges of vertex C -> ";
-    // while (edgeHead != NULL)
-    // {
-    //     cout << edgeHead->vertex << " & ";
-    //     cout << edgeHead->weight << " , ";
-    //     edgeHead = edgeHead->next;
-    // }
-    // cout << endl;
-    // edgeHead = obj1.Adjacent('D');
-    // cout << "Adjacent edges of vertex D -> ";
-    // while (edgeHead != NULL)
-    // {
-    //     cout << edgeHead->vertex << " & ";
-    //     cout << edgeHead->weight << " , ";
-    //     edgeHead = edgeHead->next;
-    // }
-    // cout << endl;
-    // edgeHead = obj1.Adjacent('E');
-    // cout << "Adjacent edges of vertex E -> ";
-    // while (edgeHead != NULL)
-    // {
-    //     cout << edgeHead->vertex << " & ";
-    //     cout << edgeHead->weight << " , ";
-    //     edgeHead = edgeHead->next;
-    // }
-    // cout << endl;
-    // edgeHead = obj1.Adjacent('F');
-    // cout << "Adjacent edges of vertex F -> ";
-    // while (edgeHead != NULL)
-    // {
-    //     cout << edgeHead->vertex << " & ";
-    //     cout << edgeHead->weight << " , ";
-    //     edgeHead = edgeHead->next;
-    // }
-    // cout << endl;
+    // obj.depthFirstSearch('B');
     return 0;
 }
-
-
