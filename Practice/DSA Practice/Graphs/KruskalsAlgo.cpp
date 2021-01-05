@@ -246,13 +246,13 @@ int Graph ::toDigit(char a)
     return (a - '0');
 }
 
-bool Graph ::checkCycle()
+bool Graph ::checkCycle() // cycles are detected in the graph by using BFS, DFS. i am using BFS
 {
     int count = 0;
     bool checker = true;
     queue<char> queueObj;
     char *arr = new char[getTotalVertices()];
-    int parent[MAX] = {-1};
+    int parent[MAX] = {-1};  //this tells the parent of every node, they are all initialized with -1. because at the start, all nodes are their own parents
     queueObj.push(head->vertexValue);
     arr[count++] = head->vertexValue;
     while (!queueObj.empty())
@@ -265,10 +265,10 @@ bool Graph ::checkCycle()
         {
             for (int i = 0; i < count; i++)
             {
-                if (arr[i] == tempEdge->edgeValue)
-                {
-                    if (parent[tempVertex] != toDigit(tempEdge->edgeValue))
-                    {
+                if (arr[i] == tempEdge->edgeValue) //For every visited vertex 'v', if there is an adjacent 'e' such that 'e' is already
+                {                                  //visited and 'e' is not parent of 'v', then there is a cycle in graph
+                    if (parent[tempVertex] != toDigit(tempEdge->edgeValue))  //returns true if the current adjacent vertice 'e' is the parent of vertice
+                    {                                                        // 'v' which means that a cycle is being formed      
                         return true;
                     }
                     checker = false;
@@ -278,7 +278,7 @@ bool Graph ::checkCycle()
             if (checker)
             {
                 queueObj.push(tempEdge->edgeValue);
-                parent[tempEdge->edgeValue] = toDigit(tempVertex);
+                parent[tempEdge->edgeValue] = toDigit(tempVertex);   //sets the current vertice 'v' as the parent of the current adjacent vertice 'e'
                 arr[count++] = tempEdge->edgeValue;
             }
             checker = true;
@@ -291,7 +291,7 @@ bool Graph ::checkCycle()
 Graph Graph::MSTbyKruskals()
 {
     Graph MST;
-    Graph tempObj;
+    Graph tempObj; // this obj is used to check discarded edges that makes cycle
     bool checker = false;
     int minimum = MAX;
     int numOfEdges = 0;
@@ -306,9 +306,8 @@ Graph Graph::MSTbyKruskals()
             {
                 if (e->weight < minimum) //returns true if the weight of the edge is less than the current minimum
                 {
-                    if (!tempObj.isEdgePresent(v->vertexValue, e->edgeValue))
+                    if (!tempObj.isEdgePresent(v->vertexValue, e->edgeValue)) 
                     {
-
                         minimum = e->weight;
                         temp1 = v;
                         temp2 = e;
@@ -328,7 +327,7 @@ Graph Graph::MSTbyKruskals()
         }
         MST.insertEdge(temp1->vertexValue, temp2->edgeValue, minimum);
         tempObj.insertEdge(temp1->vertexValue, temp2->edgeValue, minimum);
-        if (MST.checkCycle())
+        if (MST.checkCycle()) // check whether the shortest that we have added is making cycle or not. If it is making cycle it would delete the edge else it would continue.
         {
             MST.deleteEdge(temp1->vertexValue, temp2->edgeValue);
             continue;
