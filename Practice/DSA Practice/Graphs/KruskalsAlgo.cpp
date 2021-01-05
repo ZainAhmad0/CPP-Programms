@@ -1,403 +1,346 @@
-/* this code is implemented correct but in linux it displays
-segmentation fault but when I run it in online cpp compiler or
-in windows it runs perfectly fine
-29 Nov 2020 (I ran it on linux ubuntu)
-*/
-
+#define MAX 999999
 #include <iostream>
 #include <queue>
-#include <stack>
-#include <list>
-#define MAX 999999
-
 using namespace std;
-
-template <class B>
-struct Edge
+struct edge
 {
-    B vertex;
-    Edge<B> *next;
-    float weight;
+    char edgeValue;
+    edge *nextAdj;
+    int weight; //weight is introduced for minimum spanning trees algos
 };
-
-template <class A>
-struct VertexNode
+struct vertex
 {
-    Edge<A> *edgeHead;
-    A vertex;
-    VertexNode *nextVertex;
+    char vertexValue;
+    edge *adjList;
+    vertex *next;
 };
-
-template <class A>
 class Graph
 {
 private:
-    VertexNode<A> *head;
+    vertex *head;
     int getTotalVertices();
-    VertexNode<A> *getVertexAdress(A vertex);
+    bool isVertexPresent(char);
+    bool isEdgePresent(char, char);
+    bool checkCycle();
+    vertex *getVertexAdress(char);
+    int toDigit(char a);
 
 public:
     Graph();
-    void insertVertex(A vertex);
-    bool insertEdge(A vertex1, A vertex2, float edgeWeight); // this would return true if the both the vertices exists otherwise false
-    bool deleteVertex(A vertex);                             // this would return true if the vertex exists otherwise false
-    bool deleteEdge(A vertex1, A vertex2);                   // this would return true if the both the vertices exists and the edge between them exists otherwise false
-    bool isEmpty();                                          // check wheter the graph is empty or not - contains any vertex or not
-    void Adjacent(A vertex);                                 // return the edge head of all the adjacent vertices of a prticular vertex
-    void MSTByKruskals();                                // returns the minimun spanning tree by kruskals algorithm
-    list<A> breathFirstSearch(A vertex);                     //uses queue
-    void depthFirstSearch(A vertex);                         // uses stack for backtracking
+    bool isEmpty();
+    void insertVertex(char);
+    void deleteVertex(char);
+    void insertEdge(char, char, int);
+    void deleteEdge(char, char);
+    void adjacent(char);
+    Graph MSTbyKruskals();
 };
 
-template <class A> 
-Graph<A>::Graph()
+int Graph::getTotalVertices()
 {
-    head->edgeHead = NULL;
-    head->nextVertex = NULL;
+    int total = 0;
+    for (vertex *t = head; t != NULL; t = t->next)
+    {
+        total++;
+    }
+    return total;
+}
+
+vertex *Graph ::getVertexAdress(char v)
+{
+    vertex *temp;
+    temp = head;
+    while (temp != NULL)
+    {
+        if (temp->vertexValue == v)
+        {
+            return temp;
+        }
+        temp = temp->next;
+    }
+    return NULL;
+}
+
+Graph::Graph()
+{
     head = NULL;
 }
-
-template <class A> 
-void Graph<A> :: MSTByKruskals()
+bool Graph::isEmpty()
 {
-    float minimum=MAX;
-    cout<<minimum<<endl;
-    // Graph<A> MST;
-    // for(VertexNode<A> *tempVertex=head; tempVertex!=NULL; tempVertex=tempVertex->nextVertex)
-    // {
-        // cout<<"Vertex "<<tempVertex->vertex<<"  ";
-        // for(Edge<A> *tempEdge = tempVertex->edgeHead; tempEdge!=NULL; tempEdge=tempEdge->next)
-        // {
-        //     cout<<" "<<tempEdge->vertex;
-        // }
-        // cout<<endl;
-    // }
-    cout<<"Zain";
-    return ;    
+    return (head == NULL);
 }
-
-template <class A>
-void Graph<A>::depthFirstSearch(A vertex)
+void Graph::insertVertex(char vertexValue)
 {
-    int count = 0;
-    bool checker = true;
-    stack<A> stackObj;
-    A *arr = new A[getTotalVertices()];
-    stackObj.push(vertex);
-    cout << vertex << ", ";
-    arr[count++] = vertex;
-    while (!stackObj.empty())
+    if (isEmpty())
     {
-        A tempVertex = stackObj.top();
-        VertexNode<A> *temp = getVertexAdress(tempVertex);
-        Edge<A> *tempEdge = temp->edgeHead;
-        while (tempEdge != NULL)
+        vertex *v = new vertex;
+        v->vertexValue = vertexValue;
+        v->adjList = NULL;
+        v->next = NULL;
+        head = v;
+        return;
+    }
+    vertex *temp;
+    for (temp = head; temp->next != NULL; temp = temp->next)
+        ;
+    vertex *v = new vertex;
+    v->vertexValue = vertexValue;
+    v->adjList = NULL;
+    v->next = NULL;
+    temp->next = v;
+}
+void Graph::deleteVertex(char vertexValue)
+{
+    vertex *p;
+    vertex *q;
+    edge *r;
+    edge *s;
+    for (q = 0, p = head; p != NULL; q = p, p = p->next) //traverse downward to find vertex to delete
+    {
+        if (head->vertexValue == vertexValue) //true if the vertex to be deleted is the first vertex
+            head = head->next;
+        else if (p->vertexValue == vertexValue)
+            q->next = p->next;
+        for (s = 0, r = p->adjList; r != NULL; s = r, r = r->nextAdj) //goes into the edges of every vertex and deletes the dges containing the vertexValue
         {
-            for (int i = 0; i < count; i++)
-            {
-                if (arr[i] == tempEdge->vertex)
-                {
-                    checker = false;
-                    break;
-                }
-            }
-            if (checker)
-            {
-                stackObj.push(tempEdge->vertex);
-                cout << tempEdge->vertex << ", ";
-                arr[count++] = tempEdge->vertex;
-                break;
-            }
-            else if (tempEdge->next == NULL && !checker)
-            {
-                stackObj.pop();
-            }
-            checker = true;
-            tempEdge = tempEdge->next;
+            if (p->adjList->edgeValue == vertexValue) //if edge to be deleted is the first edge
+                p->adjList = p->adjList->nextAdj;
+            else if (r->edgeValue == vertexValue)
+                s->nextAdj = r->nextAdj;
         }
     }
-    cout << endl;
 }
-
-template <class A>
-list<A> Graph<A>::breathFirstSearch(A vertex)
+void Graph::insertEdge(char vertexValue1, char vertexValue2, int w)
 {
-    int count = 0;
-    bool checker = true;
-    list<A> objList; // this is for returning the list of vertexes that make bfs
-    queue<A> queueObj;
-    A *arr = new A[getTotalVertices()];
-    queueObj.push(vertex);
-    arr[count++] = vertex;
-    while (!queueObj.empty())
+    vertex *vIterator1;
+    for (vIterator1 = head; vIterator1->vertexValue != vertexValue1; vIterator1 = vIterator1->next)
+        ;                                        //traverses downward to find vertexValue1
+    if (vIterator1->vertexValue == vertexValue1) //true is vertexValue1 found
     {
-        A tempVertex = queueObj.front();
-        queueObj.pop();
-        VertexNode<A> *temp = getVertexAdress(tempVertex);
-        objList.push_back(tempVertex);
-        Edge<A> *tempEdge = temp->edgeHead;
-        while (tempEdge != NULL)
+        if (vIterator1->adjList == NULL) //true if vertexValue1 has no edges yet
         {
-            for (int i = 0; i < count; i++)
-            {
-                if (arr[i] == tempEdge->vertex)
-                {
-                    checker = false;
-                    break;
-                }
-            }
-            if (checker)
-            {
-                queueObj.push(tempEdge->vertex);
-                arr[count++] = tempEdge->vertex;
-            }
-            checker = true;
-            tempEdge = tempEdge->next;
+            edge *e = new edge; //insert vertexValue2 as edge of vertexValue1
+            e->edgeValue = vertexValue2;
+            e->nextAdj = NULL;
+            e->weight = w;
+            vIterator1->adjList = e;
+        }
+        else
+        {
+            edge *eIterator1;
+            for (eIterator1 = vIterator1->adjList; eIterator1->nextAdj != NULL; eIterator1 = eIterator1->nextAdj)
+                ;
+            edge *e = new edge;
+            e->edgeValue = vertexValue2;
+            e->nextAdj = NULL;
+            e->weight = w;
+            eIterator1->nextAdj = e;
         }
     }
-    return objList;
-}
-
-template <class A>
-void Graph<A>::Adjacent(A vertex) // would return the list head of the edges
-{
-    for (VertexNode<A> *temp = head; temp != NULL; temp = temp->nextVertex)
+    vertex *vIterator2;
+    for (vIterator2 = head; vIterator2->vertexValue != vertexValue2; vIterator2 = vIterator2->next)
+        ;                                        //traverses downward to find vertexValue2
+    if (vIterator2->vertexValue == vertexValue2) //true if vertexValue2 is found
     {
-        if (temp->vertex == vertex)
+        if (vIterator2->adjList == NULL) //true is vertexValue2 has no edges yet
         {
-            Edge<A> *tempEdge = temp->edgeHead;
-            cout << "Adjacent edges of vertex " << vertex << " = ";
-            for (Edge<A> *tempEdge = temp->edgeHead; tempEdge != NULL; tempEdge = tempEdge->next)
+            edge *e = new edge; //insert vertexValue2 as edge of vertexvalue1
+            e->edgeValue = vertexValue1;
+            e->nextAdj = NULL;
+            e->weight = w;
+            vIterator2->adjList = e;
+        }
+        else
+        {
+            edge *eIterator2;
+            for (eIterator2 = vIterator2->adjList; eIterator2->nextAdj != NULL; eIterator2 = eIterator2->nextAdj)
+                ;
+            edge *e = new edge;
+            e->edgeValue = vertexValue1;
+            e->nextAdj = NULL;
+            e->weight = w;
+            eIterator2->nextAdj = e;
+        }
+    }
+}
+void Graph::deleteEdge(char value1, char value2)
+{
+    vertex *p;
+    edge *q;
+    edge *r;
+    for (p = head; p != NULL; p = p->next) //traverse downward to find value1
+    {
+        if (p->vertexValue == value1)
+        {
+            for (r = 0, q = p->adjList; q != NULL; r = q, q = q->nextAdj) //traverses through the edges of value1
             {
-                cout << tempEdge->vertex << "(" << tempEdge->weight << ") ";
+                if (p->adjList->edgeValue == value2) //true if edge to be deleted is the first
+                    p->adjList = p->adjList->nextAdj;
+                if (q->edgeValue == value2)
+                    r->nextAdj = q->nextAdj;
+            }
+        }
+    }
+    for (p = head; p != NULL; p = p->next) //traverse downward to find value2
+    {
+        if (p->vertexValue == value2)
+        {
+            for (r = 0, q = p->adjList; q != NULL; r = q, q = q->nextAdj) //traverse through the edges of value2
+            {
+                if (p->adjList->edgeValue == value1) //true if the edge to be deleted is the first
+                    p->adjList = p->adjList->nextAdj;
+                else if (q->edgeValue == value1)
+                    r->nextAdj = q->nextAdj;
+            }
+        }
+    }
+}
+void Graph::adjacent(char value)
+{
+    cout << "Adjacent of " << value << " = ";
+    for (vertex *t = head; t != NULL; t = t->next)
+    {
+        if (t->vertexValue == value)
+        {
+            for (edge *w = t->adjList; w != NULL; w = w->nextAdj)
+            {
+                cout << w->edgeValue << "(" << w->weight << ")"
+                     << " ";
             }
             cout << endl;
             break;
         }
     }
-    return;
 }
 
-template <class A>
-bool Graph<A>::isEmpty()
+bool Graph::isVertexPresent(char value)
 {
-    return (head == NULL);
-}
-
-template <class A>
-void Graph<A>::insertVertex(A vertex)
-{
-    if (head == NULL)
+    for (vertex *v = head; v != NULL; v = v->next)
     {
-        VertexNode<A> *newNodeVertex = new VertexNode<A>();
-        newNodeVertex->vertex = vertex;
-        newNodeVertex->nextVertex = NULL;
-        newNodeVertex->edgeHead = NULL;
-        head = newNodeVertex;
+        if (v->vertexValue == value)
+            return true;
     }
-    else
-    {
-        VertexNode<A> *temp = head;
-        while (temp->nextVertex != NULL)
-        {
-            temp = temp->nextVertex;
-        }
-        VertexNode<A> *newNodeVertex = new VertexNode<A>();
-        newNodeVertex->vertex = vertex;
-        newNodeVertex->nextVertex = NULL;
-        newNodeVertex->edgeHead = NULL;
-        temp->nextVertex = newNodeVertex;
-    }
+    return false;
 }
 
-template <class A>
-bool Graph<A>::insertEdge(A vertexOne, A vertexTwo, float edgeWeight)
+bool Graph ::isEdgePresent(char vertexValue, char edgeValue)
 {
-    // edge from vertex-one to vertex-two would be added as well from vertex-two to vertex-one would also be added
-    bool flag = false;
-    for (VertexNode<A> *temp = head; temp != NULL; temp = temp->nextVertex)
+    for (vertex *v = head; v != NULL; v = v->next)
     {
-        if (temp->vertex == vertexOne || temp->vertex == vertexTwo)
+        if (v->vertexValue == vertexValue)
         {
-            A vertex;
-            if (temp->vertex == vertexOne)
+            for (edge *e = v->adjList; e != NULL; e = e->nextAdj)
             {
-                vertex = vertexTwo;
-            }
-            else
-            {
-                vertex = vertexOne;
-            }
-            /* the above if else condition is implemented to add the edges from vertex1 to vertex2 as well as from vertex2 to vertex1*/
-            if (temp->edgeHead == NULL)
-            {
-                Edge<A> *tempEdge = new Edge<A>;
-                tempEdge->next = NULL;
-                tempEdge->vertex = vertex;
-                tempEdge->weight = edgeWeight;
-                temp->edgeHead = tempEdge;
-                flag = true;
-                continue;
-            }
-            else
-            {
-                Edge<A> *tempEdge, *tempEdge1;
-                tempEdge1 = temp->edgeHead;
-                for (tempEdge = temp->edgeHead; tempEdge != NULL; tempEdge = tempEdge->next)
+                if (e->edgeValue == edgeValue)
                 {
-                    if (tempEdge->vertex == vertex)
-                    {
-                        continue;
-                    }
-                    tempEdge1 = tempEdge;
-                }
-               
-                    Edge<A> *newEdge = new Edge<A>;
-                    newEdge->vertex = vertex;
-                    newEdge->next = NULL;
-                    newEdge->weight = edgeWeight;
-                    tempEdge1->next = newEdge;
-                    flag = true;
-                
-            }
-        }
-        
-    }
-    return flag;
-}
-
-template <class A>
-bool Graph<A>::deleteVertex(A vertex)
-{
-    bool flag = false;
-    VertexNode<A> *temp1;
-    temp1 = head;
-    for (VertexNode<A> *temp = head; temp != NULL; temp = temp->nextVertex)
-    {
-        if (temp->vertex == vertex)
-        {
-            if (temp == head)
-            {
-                head = temp->nextVertex;
-            }
-            else
-            {
-                temp1->nextVertex = temp->nextVertex;
-            }
-            delete temp;
-            // now as the vertex is deleted i am now deleting all edges associated with that vertex
-            for (VertexNode<A> *temp = head; temp != NULL; temp = temp->nextVertex)
-            {
-                if (temp->edgeHead == NULL)
-                {
-                    continue;
-                }
-                else
-                {
-                    Edge<A> *tempEdge1 = temp->edgeHead;
-                    Edge<A> *tempEdge;
-                    for (tempEdge = temp->edgeHead; tempEdge != NULL; tempEdge = tempEdge->next)
-                    {
-                        if (tempEdge->vertex == vertex)
-                        {
-                            if (tempEdge == temp->edgeHead)
-                            {
-                                temp->edgeHead = tempEdge->next;
-                            }
-                            else
-                            {
-                                tempEdge1->next = tempEdge->next;
-                            }
-                            delete tempEdge;
-                            break;
-                        }
-                        tempEdge1 = tempEdge;
-                    }
+                    return true;
                 }
             }
-            flag = true;
-            break; // as the vertex and all the edges associated with this vertex is successfully deleted so breaking the loop
         }
-        temp1 = temp;
     }
-    return flag;
+    return false;
 }
 
-template <class A>
-bool Graph<A>::deleteEdge(A vertexOne, A vertexTwo)
+int Graph ::toDigit(char a)
 {
-    bool flag = false;
-    // edge from both the vertices would be deleted
-    for (VertexNode<A> *temp = head; temp != NULL; temp = temp->nextVertex)
+    return (a - '0');
+}
+
+bool Graph ::checkCycle()
+{
+    int count = 0;
+    bool checker = true;
+    queue<char> queueObj;
+    char *arr = new char[getTotalVertices()];
+    int parent[MAX] = {-1};
+    queueObj.push(head->vertexValue);
+    arr[count++] = head->vertexValue;
+    while (!queueObj.empty())
     {
-        if (temp->vertex == vertexOne || temp->vertex == vertexTwo)
+        char tempVertex = queueObj.front();
+        queueObj.pop();
+        vertex *temp = getVertexAdress(tempVertex);
+        edge *tempEdge = temp->adjList;
+        while (tempEdge != NULL)
         {
-            A vertex;
-            if (temp->vertex == vertexOne)
+            for (int i = 0; i < count; i++)
             {
-                vertex = vertexTwo;
-            }
-            else
-            {
-                vertex = vertexOne;
-            }
-            Edge<A> *tempEdge1 = temp->edgeHead;
-            Edge<A> *tempEdge;
-            for (tempEdge = temp->edgeHead; tempEdge != NULL; tempEdge = tempEdge->next)
-            {
-                if (tempEdge->vertex == vertex)
+                if (arr[i] == tempEdge->edgeValue)
                 {
-                    if (tempEdge == temp->edgeHead)
+                    if (parent[tempVertex] != toDigit(tempEdge->edgeValue))
                     {
-                        temp->edgeHead = tempEdge->next;
+                        return true;
                     }
-                    else
-                    {
-                        tempEdge1->next = tempEdge->next;
-                    }
-                    delete tempEdge;
-                    flag = true;
+                    checker = false;
                     break;
                 }
-                tempEdge1 = tempEdge;
+            }
+            if (checker)
+            {
+                queueObj.push(tempEdge->edgeValue);
+                parent[tempEdge->edgeValue] = toDigit(tempVertex);
+                arr[count++] = tempEdge->edgeValue;
+            }
+            checker = true;
+            tempEdge = tempEdge->nextAdj;
+        }
+    }
+    return false;
+}
+
+Graph Graph::MSTbyKruskals()
+{
+    Graph MST;
+    Graph tempObj;
+    bool checker = false;
+    int minimum = MAX;
+    int numOfEdges = 0;
+    vertex *temp1;
+    edge *temp2;
+    while (numOfEdges != getTotalVertices() - 1) //property of MST
+    {
+        minimum = MAX;
+        for (vertex *v = head; v != NULL; v = v->next)
+        {
+            for (edge *e = v->adjList; e != NULL; e = e->nextAdj)
+            {
+                if (e->weight < minimum) //returns true if the weight of the edge is less than the current minimum
+                {
+                    if (!tempObj.isEdgePresent(v->vertexValue, e->edgeValue))
+                    {
+
+                        minimum = e->weight;
+                        temp1 = v;
+                        temp2 = e;
+                    }
+                }
             }
         }
-    }
-    return flag;
-}
-
-template <class A>
-int Graph<A>::getTotalVertices()
-{
-    VertexNode<A> *temp = head;
-    int i = 0;
-    while (temp != NULL)
-    {
-        temp = temp->nextVertex;
-        i++;
-    }
-    return i;
-}
-
-template <class A>
-VertexNode<A> *Graph<A>::getVertexAdress(A vertex)
-{
-    VertexNode<A> *temp = head;
-    while (temp != NULL)
-    {
-        if (temp->vertex == vertex)
+        if (!MST.isVertexPresent(temp1->vertexValue))
         {
-            return temp;
+            MST.insertVertex(temp1->vertexValue);
+            tempObj.insertVertex(temp1->vertexValue);
         }
-        temp = temp->nextVertex;
+        if (!MST.isVertexPresent(temp2->edgeValue))
+        {
+            MST.insertVertex(temp2->edgeValue);
+            tempObj.insertVertex(temp2->edgeValue);
+        }
+        MST.insertEdge(temp1->vertexValue, temp2->edgeValue, minimum);
+        tempObj.insertEdge(temp1->vertexValue, temp2->edgeValue, minimum);
+        if (MST.checkCycle())
+        {
+            MST.deleteEdge(temp1->vertexValue, temp2->edgeValue);
+            continue;
+        }
+        numOfEdges++;
     }
-    return NULL;
+    return MST;
 }
-
 int main()
 {
-    Graph<char> obj;
-    // adding vertices
+    Graph obj;
+    Graph obj2;
     obj.insertVertex('A');
     obj.insertVertex('B');
     obj.insertVertex('C');
@@ -414,23 +357,11 @@ int main()
     obj.insertEdge('D', 'E', 2);
     obj.insertEdge('D', 'F', 5);
     obj.insertEdge('E', 'F', 2);
-    cout << "Zain Ahmda" << endl;
-    obj.MSTByKruskals();
-    // obj.Adjacent('A');
-    // obj.Adjacent('B');
-    // obj.Adjacent('C');
-    // obj.Adjacent('D');
-    // obj.Adjacent('E');
-    // obj.Adjacent('F');
-    // now displaying adjacent edges of the every particular vertices for checking that our graph is implemented correctly
-    // list<char> objList = obj.breathFirstSearch('A');
-    // int size = objList.size();
-    // for (int i = 0; i < size; i++)
-    // {
-    //     cout << objList.front() << ", ";
-    //     objList.pop_front();
-    // }
-    // cout << endl;
-    // obj.depthFirstSearch('B');
-    return 0;
+    obj2 = obj.MSTbyKruskals();
+    obj2.adjacent('A'); //displaying adjacent vertices of spanning tree
+    obj2.adjacent('B');
+    obj2.adjacent('C');
+    obj2.adjacent('D');
+    obj2.adjacent('E');
+    obj2.adjacent('F');
 }

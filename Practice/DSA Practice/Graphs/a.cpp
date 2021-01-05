@@ -1,5 +1,6 @@
 #define MAX 999999
 #include <iostream>
+#include <queue>
 using namespace std;
 struct edge
 {
@@ -20,6 +21,9 @@ private:
     int getTotalVertices();
     bool isVertexPresent(char);
     bool isEdgePresent(char, char);
+    bool checkCycle();
+    vertex *getVertexAdress(char);
+    int toDigit(char a);
 
 public:
     Graph();
@@ -31,6 +35,7 @@ public:
     void adjacent(char);
     Graph MSTbyKruskals();
 };
+
 int Graph::getTotalVertices()
 {
     int total = 0;
@@ -39,6 +44,21 @@ int Graph::getTotalVertices()
         total++;
     }
     return total;
+}
+
+vertex *Graph ::getVertexAdress(char v)
+{
+    vertex *temp;
+    temp = head;
+    while (temp != NULL)
+    {
+        if (temp->vertexValue == v)
+        {
+            return temp;
+        }
+        temp = temp->next;
+    }
+    return NULL;
 }
 
 Graph::Graph()
@@ -221,15 +241,63 @@ bool Graph ::isEdgePresent(char vertexValue, char edgeValue)
     return false;
 }
 
+int Graph ::toDigit(char a)
+{
+    return (a - '0');
+}
+
+bool Graph ::checkCycle()
+{
+    int count = 0;
+    bool checker = true;
+    queue<char> queueObj;
+    char *arr = new char[getTotalVertices()];
+    int parent[MAX] = {-1};
+    queueObj.push(head->vertexValue);
+    arr[count++] = head->vertexValue;
+    while (!queueObj.empty())
+    {
+        char tempVertex = queueObj.front();
+        queueObj.pop();
+        vertex *temp = getVertexAdress(tempVertex);
+        edge *tempEdge = temp->adjList;
+        while (tempEdge != NULL)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                if (arr[i] == tempEdge->edgeValue)
+                {
+                    if (parent[tempVertex] != toDigit(tempEdge->edgeValue))
+                    {
+                        return true;
+                    }
+                    checker = false;
+                    break;
+                }
+            }
+            if (checker)
+            {
+                queueObj.push(tempEdge->edgeValue);
+                parent[tempEdge->edgeValue] = toDigit(tempVertex);
+                arr[count++] = tempEdge->edgeValue;
+            }
+            checker = true;
+            tempEdge = tempEdge->nextAdj;
+        }
+    }
+    return false;
+}
+
 Graph Graph::MSTbyKruskals()
 {
     Graph MST;
+    Graph tempObj;
     bool checker = false;
     int minimum = MAX;
     int numOfEdges = 0;
     vertex *temp1;
     edge *temp2;
-    while (numOfEdges < getTotalVertices()) //property of MST
+    while (numOfEdges != getTotalVertices() - 1) //property of MST
     {
         minimum = MAX;
         for (vertex *v = head; v != NULL; v = v->next)
@@ -237,38 +305,35 @@ Graph Graph::MSTbyKruskals()
             for (edge *e = v->adjList; e != NULL; e = e->nextAdj)
             {
                 if (e->weight < minimum) //returns true if the weight of the edge is less than the current minimum
-                {                
-                    if (!MST.isEdgePresent(v->vertexValue, e->edgeValue))
+                {
+                    if (!tempObj.isEdgePresent(v->vertexValue, e->edgeValue))
                     {
-                        if (MST.isVertexPresent(v->vertexValue) && MST.isVertexPresent(e->edgeValue))
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            minimum = e->weight;
-                            temp1 = v;
-                            temp2 = e;
-                            cout << "Smallest Edge is " << temp1->vertexValue << " - " << temp2->edgeValue << " " << minimum << endl;
-                        }
 
-                    } 
+                        minimum = e->weight;
+                        temp1 = v;
+                        temp2 = e;
+                    }
                 }
             }
-            cout<<endl;
         }
         if (!MST.isVertexPresent(temp1->vertexValue))
         {
             MST.insertVertex(temp1->vertexValue);
+            tempObj.insertVertex(temp1->vertexValue);
         }
         if (!MST.isVertexPresent(temp2->edgeValue))
         {
             MST.insertVertex(temp2->edgeValue);
+            tempObj.insertVertex(temp2->edgeValue);
         }
-        cout << "I am inserting   " << temp1->vertexValue << " - " << temp2->edgeValue << " " << minimum << endl;
         MST.insertEdge(temp1->vertexValue, temp2->edgeValue, minimum);
+        tempObj.insertEdge(temp1->vertexValue, temp2->edgeValue, minimum);
+        if (MST.checkCycle())
+        {
+            MST.deleteEdge(temp1->vertexValue, temp2->edgeValue);
+            continue;
+        }
         numOfEdges++;
-        cout << "Edge Inserted" << endl;
     }
     return MST;
 }
@@ -293,10 +358,10 @@ int main()
     obj.insertEdge('D', 'F', 5);
     obj.insertEdge('E', 'F', 2);
     obj2 = obj.MSTbyKruskals();
-    // obj2.adjacent('A'); //displaying adjacent vertices of spanning tree
-    // obj2.adjacent('B');
-    // obj2.adjacent('C');
-    // obj2.adjacent('D');
-    // obj2.adjacent('E');
-    // obj2.adjacent('F');
+    obj2.adjacent('A'); //displaying adjacent vertices of spanning tree
+    obj2.adjacent('B');
+    obj2.adjacent('C');
+    obj2.adjacent('D');
+    obj2.adjacent('E');
+    obj2.adjacent('F');
 }
