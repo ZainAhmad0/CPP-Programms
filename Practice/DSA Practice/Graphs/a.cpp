@@ -18,11 +18,10 @@ class Graph
 {
 private:
     vertex *head;
-    int getTotalVertices();
     bool isVertexPresent(char);
-    bool isEdgePresent(char, char);
-    bool checkCycle();
+    bool isAllVerticesPresent(char arr[], int count);
     vertex *getVertexAdress(char);
+    int getTotalVertices();
     int toDigit(char a);
 
 public:
@@ -33,7 +32,7 @@ public:
     void insertEdge(char, char, int);
     void deleteEdge(char, char);
     void adjacent(char);
-    Graph MSTbyKruskals();
+    void DijiskrasAlgorithm(char sourceVertex);
 };
 
 int Graph::getTotalVertices()
@@ -44,6 +43,34 @@ int Graph::getTotalVertices()
         total++;
     }
     return total;
+}
+
+bool Graph ::isAllVerticesPresent(char arr[], int count)
+{
+    vertex *temp;
+    bool checker = false;
+    temp = head;
+    while (temp != NULL)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            if (temp->vertexValue == arr[i])
+            {
+                checker = true;
+                break;
+            }
+        }
+        if (checker == true)
+        {
+            temp = temp->next;
+            checker = false;
+        }
+        else
+        {
+            break;
+        }
+    }
+    return checker;
 }
 
 vertex *Graph ::getVertexAdress(char v)
@@ -223,120 +250,50 @@ bool Graph::isVertexPresent(char value)
     return false;
 }
 
-bool Graph ::isEdgePresent(char vertexValue, char edgeValue)
-{
-    for (vertex *v = head; v != NULL; v = v->next)
-    {
-        if (v->vertexValue == vertexValue)
-        {
-            for (edge *e = v->adjList; e != NULL; e = e->nextAdj)
-            {
-                if (e->edgeValue == edgeValue)
-                {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
 int Graph ::toDigit(char a)
 {
     return (a - '0');
 }
 
-bool Graph ::checkCycle()
+void Graph::DijiskrasAlgorithm(char sourceVertex)
 {
-    int count = 0;
-    bool checker = true;
-    queue<char> queueObj;
-    char *arr = new char[getTotalVertices()];
-    int parent[MAX] = {-1};
-    queueObj.push(head->vertexValue);
-    arr[count++] = head->vertexValue;
-    while (!queueObj.empty())
+    char selectedVertices[getTotalVertices()];
+    float weight[MAX] = {MAX};
+    float tempWeight;
+    Graph objTemp;
+    int counter = 0;
+    selectedVertices[counter++] = sourceVertex;
+    objTemp.insertVertex(sourceVertex);
+    weight[toDigit(sourceVertex)] = 0;
+    edge *temp1;
+    while (isAllVerticesPresent(selectedVertices, counter))
     {
-        char tempVertex = queueObj.front();
-        queueObj.pop();
-        vertex *temp = getVertexAdress(tempVertex);
-        edge *tempEdge = temp->adjList;
-        while (tempEdge != NULL)
+        tempWeight = MAX;
+        for (int i = 0; i < counter; i++)
         {
-            for (int i = 0; i < count; i++)
+            for (edge *temp = getVertexAdress(selectedVertices[i])->adjList; temp != NULL; temp = temp->nextAdj)
             {
-                if (arr[i] == tempEdge->edgeValue)
+                if (temp->weight < tempWeight && !objTemp.isVertexPresent(temp->edgeValue))
                 {
-                    if (parent[tempVertex] != toDigit(tempEdge->edgeValue))
-                    {
-                        return true;
-                    }
-                    checker = false;
-                    break;
-                }
-            }
-            if (checker)
-            {
-                queueObj.push(tempEdge->edgeValue);
-                parent[tempEdge->edgeValue] = toDigit(tempVertex);
-                arr[count++] = tempEdge->edgeValue;
-            }
-            checker = true;
-            tempEdge = tempEdge->nextAdj;
-        }
-    }
-    return false;
-}
-
-Graph Graph::MSTbyKruskals()
-{
-    Graph MST;
-    Graph tempObj;
-    bool checker = false;
-    int minimum = MAX;
-    int numOfEdges = 0;
-    vertex *temp1;
-    edge *temp2;
-    while (numOfEdges != getTotalVertices() - 1) //property of MST
-    {
-        minimum = MAX;
-        for (vertex *v = head; v != NULL; v = v->next)
-        {
-            for (edge *e = v->adjList; e != NULL; e = e->nextAdj)
-            {
-                if (e->weight < minimum) //returns true if the weight of the edge is less than the current minimum
-                {
-                    if (!tempObj.isEdgePresent(v->vertexValue, e->edgeValue))
-                    {
-
-                        minimum = e->weight;
-                        temp1 = v;
-                        temp2 = e;
-                    }
+                    temp1 = temp;
+                    tempWeight = temp->weight;
+                    sourceVertex = selectedVertices[i];
                 }
             }
         }
-        if (!MST.isVertexPresent(temp1->vertexValue))
+        selectedVertices[counter++] = temp1->edgeValue;
+        objTemp.insertVertex(temp1->edgeValue);
+        if (weight[toDigit(sourceVertex)] + temp1->weight < weight[toDigit(temp1->edgeValue)])
         {
-            MST.insertVertex(temp1->vertexValue);
-            tempObj.insertVertex(temp1->vertexValue);
+            weight[toDigit(temp1->edgeValue)] = temp1->weight;
         }
-        if (!MST.isVertexPresent(temp2->edgeValue))
+        for (edge *temp = getVertexAdress(sourceVertex)->adjList; temp != NULL; temp = temp->nextAdj)
         {
-            MST.insertVertex(temp2->edgeValue);
-            tempObj.insertVertex(temp2->edgeValue);
+            weight[toDigit(temp->edgeValue)] = weight[sourceVertex] + temp->weight;
         }
-        MST.insertEdge(temp1->vertexValue, temp2->edgeValue, minimum);
-        tempObj.insertEdge(temp1->vertexValue, temp2->edgeValue, minimum);
-        if (MST.checkCycle())
-        {
-            MST.deleteEdge(temp1->vertexValue, temp2->edgeValue);
-            continue;
-        }
-        numOfEdges++;
     }
-    return MST;
 }
+
 int main()
 {
     Graph obj;
@@ -357,7 +314,7 @@ int main()
     obj.insertEdge('D', 'E', 2);
     obj.insertEdge('D', 'F', 5);
     obj.insertEdge('E', 'F', 2);
-    obj2 = obj.MSTbyKruskals();
+    obj.DijiskrasAlgorithm('A');
     obj2.adjacent('A'); //displaying adjacent vertices of spanning tree
     obj2.adjacent('B');
     obj2.adjacent('C');

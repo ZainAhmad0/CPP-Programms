@@ -41,7 +41,7 @@ public:
     bool deleteVertex(A vertex);           // this would return true if the vertex exists otherwise false
     bool deleteEdge(A vertex1, A vertex2); // this would return true if the both the vertices exists and the edge between them exists otherwise false
     bool isEmpty();                        // check wheter the graph is empty or not - contains any vertex or not
-    void Adjacent(A vertex);           // return the edge head of all the adjacent vertices of a prticular vertex
+    void Adjacent(A vertex);               // return the edge head of all the adjacent vertices of a prticular vertex
     list<A> breathFirstSearch(A vertex);   //uses queue
     void depthFirstSearch(A vertex);       // uses stack for backtracking
 };
@@ -144,15 +144,15 @@ void Graph<A>::Adjacent(A vertex) // would return the list head of the edges
         if (temp->vertex == vertex)
         {
             Edge<A> *tempEdge = temp->edgeHead;
-            cout << "Adjacent edges of vertex "<<vertex<<" -> ";
-            for(Edge<A> *tempEdge = temp->edgeHead; tempEdge!=NULL; tempEdge=tempEdge->next)
+            cout << "Adjacent edges of vertex " << vertex << " -> ";
+            for (Edge<A> *tempEdge = temp->edgeHead; tempEdge != NULL; tempEdge = tempEdge->next)
             {
-                cout<<tempEdge->vertex<<" , ";
+                cout << tempEdge->vertex << " , ";
             }
             break;
         }
     }
-    return ;
+    return;
 }
 
 template <class A>
@@ -392,17 +392,23 @@ int main()
     obj.insertEdge('E', 'D');
     obj.insertEdge('E', 'B');
     obj.insertEdge('E', 'A');
-    cout<<"Zain Ahmda"<<endl;
+    cout << "Zain Ahmad 01-131192-037" << endl;
+    cout<<"Showing Adjacent Edges"<<endl;
+    obj.Adjacent('A');
     obj.Adjacent('B');
-    // now displaying adjacent edges of the every particular vertices for checking that our graph is implemented correctly
-    // list<char> objList = obj.breathFirstSearch('A');
-    // int size = objList.size();
-    // for (int i = 0; i < size; i++)
+    obj.Adjacent('C');
+    obj.Adjacent('D');
+    obj.Adjacent('E');
+    obj.Adjacent('F');
+    // list<char> bfs = obj.breathFirstSearch('A');
+    // cout<<"Breath First Search is"<<endl;
+    // for(int i=0; i<bfs.size(); i++)
     // {
-    //     cout << objList.front() << ", ";
-    //     objList.pop_front();
+    //     cout<<bfs.front()<<"  ";
+    //     bfs.pop_front();
     // }
-    // cout << endl;
-    // obj.depthFirstSearch('B');
+    // cout<<endl;
+    // cout<<"Depth First Search is"<<endl;
+    // obj.depthFirstSearch('A');
     return 0;
 }
