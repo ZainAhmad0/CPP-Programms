@@ -19,7 +19,7 @@ class Graph
 private:
     vertex *head;
     bool isVertexPresent(char);
-    bool isAllVerticesPresent(char arr[], int count);
+    bool isAllVerticesPresent(Graph obj);
     vertex *getVertexAdress(char);
     int getTotalVertices();
     int toDigit(char a);
@@ -45,32 +45,19 @@ int Graph::getTotalVertices()
     return total;
 }
 
-bool Graph ::isAllVerticesPresent(char arr[], int count)
+bool Graph ::isAllVerticesPresent(Graph obj)
 {
     vertex *temp;
-    bool checker = false;
     temp = head;
     while (temp != NULL)
     {
-        for (int i = 0; i < count; i++)
+        if (!obj.isVertexPresent(temp->vertexValue))
         {
-            if (temp->vertexValue == arr[i])
-            {
-                checker = true;
-                break;
-            }
+            return false;
         }
-        if (checker == true)
-        {
-            temp = temp->next;
-            checker = false;
-        }
-        else
-        {
-            break;
-        }
+        temp = temp->next;
     }
-    return checker;
+    return true;
 }
 
 vertex *Graph ::getVertexAdress(char v)
@@ -257,40 +244,50 @@ int Graph ::toDigit(char a)
 
 void Graph::DijiskrasAlgorithm(char sourceVertex)
 {
+    char a = sourceVertex;
     char selectedVertices[getTotalVertices()];
+    char parentSource;
     float weight[MAX] = {MAX};
     float tempWeight;
     Graph objTemp;
     int counter = 0;
-    selectedVertices[counter++] = sourceVertex;
-    objTemp.insertVertex(sourceVertex);
-    weight[toDigit(sourceVertex)] = 0;
     edge *temp1;
-    while (isAllVerticesPresent(selectedVertices, counter))
+    for (int i = 0; i < MAX; i++)
+    {
+        weight[i] = MAX;
+    }
+    weight[toDigit(sourceVertex)] = 0;
+    while (!isAllVerticesPresent(objTemp))
     {
         tempWeight = MAX;
+        selectedVertices[counter++] = sourceVertex;
+        objTemp.insertVertex(sourceVertex);
+        for (edge *temp = getVertexAdress(sourceVertex)->adjList; temp != NULL; temp = temp->nextAdj)
+        {
+            if (weight[toDigit(sourceVertex)] + temp->weight < weight[toDigit(temp->edgeValue)])
+            {
+                weight[toDigit(temp->edgeValue)] = weight[toDigit(sourceVertex)] + temp->weight;
+            }
+        }
         for (int i = 0; i < counter; i++)
         {
             for (edge *temp = getVertexAdress(selectedVertices[i])->adjList; temp != NULL; temp = temp->nextAdj)
             {
-                if (temp->weight < tempWeight && !objTemp.isVertexPresent(temp->edgeValue))
+                if (weight[toDigit(temp->edgeValue)] < tempWeight && !objTemp.isVertexPresent(temp->edgeValue))
                 {
                     temp1 = temp;
-                    tempWeight = temp->weight;
-                    sourceVertex = selectedVertices[i];
+                    tempWeight = weight[toDigit(temp->edgeValue)];
+                    parentSource = selectedVertices[i];
                 }
             }
         }
-        selectedVertices[counter++] = temp1->edgeValue;
-        objTemp.insertVertex(temp1->edgeValue);
-        if (weight[toDigit(sourceVertex)] + temp1->weight < weight[toDigit(temp1->edgeValue)])
-        {
-            weight[toDigit(temp1->edgeValue)] = temp1->weight;
-        }
-        for (edge *temp = getVertexAdress(sourceVertex)->adjList; temp != NULL; temp = temp->nextAdj)
-        {
-            weight[toDigit(temp->edgeValue)] = weight[sourceVertex] + temp->weight;
-        }
+        sourceVertex = temp1->edgeValue;
+    }
+    vertex *temp2 = head;
+    while (temp2 != NULL)
+    {
+        cout << a << " - " << temp2->vertexValue << "  =   " << weight[toDigit(temp2->vertexValue)] << endl;
+        temp2 = temp2->next;
     }
 }
 
@@ -315,10 +312,10 @@ int main()
     obj.insertEdge('D', 'F', 5);
     obj.insertEdge('E', 'F', 2);
     obj.DijiskrasAlgorithm('A');
-    obj2.adjacent('A'); //displaying adjacent vertices of spanning tree
-    obj2.adjacent('B');
-    obj2.adjacent('C');
-    obj2.adjacent('D');
-    obj2.adjacent('E');
-    obj2.adjacent('F');
+    // obj2.adjacent('A'); //displaying adjacent vertices of spanning tree
+    // obj2.adjacent('B');
+    // obj2.adjacent('C');
+    // obj2.adjacent('D');
+    // obj2.adjacent('E');
+    // obj2.adjacent('F');
 }

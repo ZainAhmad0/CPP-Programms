@@ -18,11 +18,10 @@ class Graph
 {
 private:
     vertex *head;
-    int getTotalVertices();
     bool isVertexPresent(char);
-    bool isEdgePresent(char, char);
-    bool checkCycle();
+    bool isAllVerticesPresent(Graph obj);
     vertex *getVertexAdress(char);
+    int getTotalVertices();
     int toDigit(char a);
 
 public:
@@ -33,7 +32,7 @@ public:
     void insertEdge(char, char, int);
     void deleteEdge(char, char);
     void adjacent(char);
-    void DijiskrasAlgorithm(char,char);
+    void DijiskrasAlgorithm(char sourceVertex);
 };
 
 int Graph::getTotalVertices()
@@ -44,6 +43,21 @@ int Graph::getTotalVertices()
         total++;
     }
     return total;
+}
+
+bool Graph ::isAllVerticesPresent(Graph obj)
+{
+    vertex *temp;
+    temp = head;
+    while (temp != NULL)
+    {
+        if (!obj.isVertexPresent(temp->vertexValue))
+        {
+            return false;
+        }
+        temp = temp->next;
+    }
+    return true;
 }
 
 vertex *Graph ::getVertexAdress(char v)
@@ -223,74 +237,58 @@ bool Graph::isVertexPresent(char value)
     return false;
 }
 
-bool Graph ::isEdgePresent(char vertexValue, char edgeValue)
-{
-    for (vertex *v = head; v != NULL; v = v->next)
-    {
-        if (v->vertexValue == vertexValue)
-        {
-            for (edge *e = v->adjList; e != NULL; e = e->nextAdj)
-            {
-                if (e->edgeValue == edgeValue)
-                {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
 int Graph ::toDigit(char a)
 {
     return (a - '0');
 }
 
-bool Graph ::checkCycle() // cycles are detected in the graph by using BFS, DFS. i am using BFS
+void Graph::DijiskrasAlgorithm(char sourceVertex)
 {
-    int count = 0;
-    bool checker = true;
-    queue<char> queueObj;
-    char *arr = new char[getTotalVertices()];
-    int parent[MAX] = {-1};  //this tells the parent of every node, they are all initialized with -1. because at the start, all nodes are their own parents
-    queueObj.push(head->vertexValue);
-    arr[count++] = head->vertexValue;
-    while (!queueObj.empty())
+    char a = sourceVertex;
+    char selectedVertices[getTotalVertices()];
+    char parentSource;
+    float weight[MAX] = {MAX};
+    float tempWeight;
+    Graph objTemp;
+    int counter = 0;
+    edge *temp1;
+    for (int i = 0; i < MAX; i++)
     {
-        char tempVertex = queueObj.front();
-        queueObj.pop();
-        vertex *temp = getVertexAdress(tempVertex);
-        edge *tempEdge = temp->adjList;
-        while (tempEdge != NULL)
+        weight[i] = MAX;
+    }
+    weight[toDigit(sourceVertex)] = 0;
+    while (!isAllVerticesPresent(objTemp))
+    {
+        tempWeight = MAX;
+        selectedVertices[counter++] = sourceVertex;
+        objTemp.insertVertex(sourceVertex);
+        for (edge *temp = getVertexAdress(sourceVertex)->adjList; temp != NULL; temp = temp->nextAdj)
         {
-            for (int i = 0; i < count; i++)
+            if (weight[toDigit(sourceVertex)] + temp->weight < weight[toDigit(temp->edgeValue)])
             {
-                if (arr[i] == tempEdge->edgeValue) //For every visited vertex 'v', if there is an adjacent 'e' such that 'e' is already
-                {                                  //visited and 'e' is not parent of 'v', then there is a cycle in graph
-                    if (parent[tempVertex] != toDigit(tempEdge->edgeValue))  //returns true if the current adjacent vertice 'e' is the parent of vertice
-                    {                                                        // 'v' which means that a cycle is being formed      
-                        return true;
-                    }
-                    checker = false;
-                    break;
+                weight[toDigit(temp->edgeValue)] = weight[toDigit(sourceVertex)] + temp->weight;
+            }
+        }
+        for (int i = 0; i < counter; i++)
+        {
+            for (edge *temp = getVertexAdress(selectedVertices[i])->adjList; temp != NULL; temp = temp->nextAdj)
+            {
+                if (weight[toDigit(temp->edgeValue)] < tempWeight && !objTemp.isVertexPresent(temp->edgeValue))
+                {
+                    temp1 = temp;
+                    tempWeight = weight[toDigit(temp->edgeValue)];
+                    parentSource = selectedVertices[i];
                 }
             }
-            if (checker)
-            {
-                queueObj.push(tempEdge->edgeValue);
-                parent[tempEdge->edgeValue] = toDigit(tempVertex);   //sets the current vertice 'v' as the parent of the current adjacent vertice 'e'
-                arr[count++] = tempEdge->edgeValue;
-            }
-            checker = true;
-            tempEdge = tempEdge->nextAdj;
         }
+        sourceVertex = temp1->edgeValue;
     }
-    return false;
-}
-
-void Graph:: DijiskrasAlgorithm(char source, char destination)
-{
-    
+    vertex *temp2 = head;
+    while (temp2 != NULL)
+    {
+        cout << a << " - " << temp2->vertexValue << "  =   " << weight[toDigit(temp2->vertexValue)] << endl;
+        temp2 = temp2->next;
+    }
 }
 
 int main()
@@ -313,11 +311,11 @@ int main()
     obj.insertEdge('D', 'E', 2);
     obj.insertEdge('D', 'F', 5);
     obj.insertEdge('E', 'F', 2);
-    obj.DijiskrasAlgorithm('B','E');
-    obj2.adjacent('A'); //displaying adjacent vertices of spanning tree
-    obj2.adjacent('B');
-    obj2.adjacent('C');
-    obj2.adjacent('D');
-    obj2.adjacent('E');
-    obj2.adjacent('F');
+    obj.DijiskrasAlgorithm('A');
+    // obj2.adjacent('A'); //displaying adjacent vertices of spanning tree
+    // obj2.adjacent('B');
+    // obj2.adjacent('C');
+    // obj2.adjacent('D');
+    // obj2.adjacent('E');
+    // obj2.adjacent('F');
 }
