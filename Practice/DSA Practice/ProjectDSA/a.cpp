@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include "GraphManager.h"
 #include <fstream>
 using namespace std;
 
@@ -19,24 +20,27 @@ void blockDisplay()
 		 << endl;
 }
 
-string getRoomEE(char a)
+string getRoom(char a, int n)
 {
-	switch (a)
+	if (n == 1)
 	{
-	case 'A':
-		return "Auditorium";
-	case 'B':
-		return "NC-02";
-	case 'C':
-		return "XC-01";
-	case 'D':
-		return "HL-04";
-	case 'E':
-		return "OC-03";
-	default:
-		break;
+		switch (a)
+		{
+		case 'A':
+			return "Auditorium";
+		case 'B':
+			return "NC-02";
+		case 'C':
+			return "XC-01";
+		case 'D':
+			return "HL-04";
+		case 'E':
+			return "OC-03";
+		default:
+			break;
+		}
+		return " ";
 	}
-	return " ";
 }
 
 void changeData(int x)
@@ -719,7 +723,7 @@ void manageCredentials()
 	obj.close();
 }
 
-void adminLogin()
+void adminLogin(GraphManager obj)
 {
 	int x = 5;
 	string userName, password;
@@ -739,7 +743,7 @@ void adminLogin()
 			 << endl;
 		while (c != 5)
 		{
-			cout << "\nPress 1 to change routes/distances between blocks" << endl;
+			cout << "\nPress 1 to change routes distances between blocks" << endl;
 			cout << "Press 2 to display all faculty's Information (Each Department)" << endl;
 			cout << "Press 3 to view blocks reserved for each departement" << endl;
 			cout << "Press 4 to change your personal data" << endl;
@@ -752,7 +756,14 @@ void adminLogin()
 			}
 			if (c == 1)
 			{
-				cout << "." << endl;
+				int ch;
+				cout << "\nFor Which department you want to Change Route Distances" << endl;
+				cout << "1) Electrical Engineering Department" << endl;
+				cout << "2) Software Engineering Department" << endl;
+				cout << "3) Computer Engineering Department" << endl;
+				cout << "4) Computer Science" << endl;
+				cin >> ch;
+				obj.changeRoute(ch);
 			}
 			else if (c == 2)
 			{
@@ -920,7 +931,7 @@ void facultyLogin()
 
 int main()
 {
-
+	GraphManager objManager;
 	int count = 0;
 	string line;
 	ifstream read("data.txt");
@@ -953,7 +964,7 @@ int main()
 			}
 			if (choice == 1)
 			{
-				adminLogin();
+				adminLogin(objManager);
 			}
 			else if (choice == 2)
 			{

@@ -242,8 +242,37 @@ int Graph ::toDigit(char a)
     return (a - '0');
 }
 
+/*
+Below are the detailed steps used in Dijkstra’s algorithm to find the shortest path from a single source vertex to all other vertices in the given graph.
+Algorithm
+1) Create a set sptSet (shortest path tree set) that keeps track of vertices included in shortest path tree, i.e., whose minimum distance from source is calculated and finalized. Initially, this set is empty.
+2) Assign a distance value to all vertices in the input graph. Initialize all distance values as INFINITE. Assign distance value as 0 for the source vertex so that it is picked first.
+3) While sptSet doesn’t include all vertices
+….a) Pick a vertex u which is not there in sptSet and has minimum distance value.
+….b) Include u to sptSet.
+….c) Update distance value of all adjacent vertices of u. To update the distance values, iterate through all adjacent vertices. For every adjacent vertex v, if sum of distance value of u (from source) and weight of edge u-v, is less than the distance value of v, then update the distance value of v.
+
+
+
+Let us understand with the following example:
+
+
+The set sptSet is initially empty and distances assigned to vertices are
+ {0, INF, INF, INF, INF, INF, INF, INF} where INF indicates infinite.
+  Now pick the vertex with minimum distance value. The vertex 0 is picked, 
+  include it in sptSet. So sptSet becomes {0}. After including 0 to sptSet,
+   update distance values of its adjacent vertices. Adjacent vertices of 0 are 1 (this is for the graph on the website)
+   and 7. The distance values of 1 and 7 are updated as 4 and 8.
+ Following subgraph shows vertices and their distance values, only the 
+ vertices with finite distance values are shown. The vertices included in 
+ SPT are shown in green colour.
+*/
+
 void Graph::DijiskrasAlgorithm(char sourceVertex)
 {
+
+    // https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
+    // I read the pseudo algo from this site and implemented it
     char a = sourceVertex;
     char selectedVertices[getTotalVertices()];
     char parentSource;
@@ -294,7 +323,8 @@ void Graph::DijiskrasAlgorithm(char sourceVertex)
 int main()
 {
     Graph obj;
-    Graph obj2;
+    cout<<"Zain Ahmad 01-131192-037"<<endl;
+    // Graph obj2;
     obj.insertVertex('A');
     obj.insertVertex('B');
     obj.insertVertex('C');

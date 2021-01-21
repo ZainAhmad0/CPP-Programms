@@ -24,6 +24,8 @@ private:
     bool checkCycle();
     vertex *getVertexAdress(char);
     int toDigit(char a);
+    bool isAllVerticesPresent(Graph obj);
+    string getRoom(char a, int n);
 
 public:
     Graph();
@@ -32,9 +34,140 @@ public:
     void deleteVertex(char);
     void insertEdge(char, char, int);
     void deleteEdge(char, char);
-    void adjacent(char);
+    void adjacent(char,int);
     Graph MSTbyKruskals();
+    void DijiskrasAlgorithm(char sourceVertex);
+    void changeRouteDistances(int n);
+    void showRoutes(int n);
 };
+
+string Graph ::getRoom(char a, int n)
+{
+    if (n == 1)
+    {
+        switch (a)
+        {
+        case 'A':
+            return "Auditorium";
+        case 'B':
+            return "NC-02";
+        case 'C':
+            return "XC-01";
+        case 'D':
+            return "HL-04";
+        case 'E':
+            return "OC-03";
+        default:
+            break;
+        }
+        return " ";
+    }
+}
+
+void Graph ::showRoutes(int n)
+{
+    vertex *temp = head;
+    while (temp != NULL)
+    {
+        adjacent(temp->vertexValue,n);
+        cout<<endl;
+        temp = temp->next;
+    }
+}
+
+void Graph ::changeRouteDistances(int n)
+{
+    cout << "Initially The following route distances are defined" << endl<<endl;
+    vertex *temp = head;
+    edge *edgeTemp = head->adjList;
+    showRoutes(n);
+    cout << "You are requested to please enter the new route distances " << endl<<endl;
+    temp = head;
+    int newDist;
+    while (temp != NULL)
+    {
+        edgeTemp = temp->adjList;
+        while (edgeTemp != NULL)
+        {
+            cout << "Current Distance from " << getRoom(temp->vertexValue,n) << " to " << getRoom(edgeTemp->edgeValue,n) << " is " << edgeTemp->weight << endl;
+            cout << "Enter New Distance : ";
+            cin >> newDist;
+            edgeTemp->weight = newDist;
+            edgeTemp=edgeTemp->nextAdj;
+        }
+        cout << endl;
+        temp = temp->next;
+    }
+    cout << "Now the route with changed distances is" << endl<<endl;
+    showRoutes(n);
+}
+
+bool Graph ::isAllVerticesPresent(Graph obj)
+{
+    vertex *temp;
+    temp = head;
+    while (temp != NULL)
+    {
+        if (!obj.isVertexPresent(temp->vertexValue))
+        {
+            return false;
+        }
+        temp = temp->next;
+    }
+    return true;
+}
+
+void Graph::DijiskrasAlgorithm(char sourceVertex = 'A')
+{
+
+    // https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
+    // I read the pseudo algo from this site and implemented it
+    char a = sourceVertex;
+    char selectedVertices[getTotalVertices()];
+    char parentSource;
+    float weight[MAX] = {MAX};
+    float tempWeight;
+    Graph objTemp;
+    int counter = 0;
+    edge *temp1;
+    for (int i = 0; i < MAX; i++)
+    {
+        weight[i] = MAX;
+    }
+    weight[toDigit(sourceVertex)] = 0;
+    while (!isAllVerticesPresent(objTemp))
+    {
+        tempWeight = MAX;
+        selectedVertices[counter++] = sourceVertex;
+        objTemp.insertVertex(sourceVertex);
+        for (edge *temp = getVertexAdress(sourceVertex)->adjList; temp != NULL; temp = temp->nextAdj)
+        {
+            if (weight[toDigit(sourceVertex)] + temp->weight < weight[toDigit(temp->edgeValue)])
+            {
+                weight[toDigit(temp->edgeValue)] = weight[toDigit(sourceVertex)] + temp->weight;
+            }
+        }
+        for (int i = 0; i < counter; i++)
+        {
+            for (edge *temp = getVertexAdress(selectedVertices[i])->adjList; temp != NULL; temp = temp->nextAdj)
+            {
+                if (weight[toDigit(temp->edgeValue)] < tempWeight && !objTemp.isVertexPresent(temp->edgeValue))
+                {
+                    temp1 = temp;
+                    tempWeight = weight[toDigit(temp->edgeValue)];
+                    parentSource = selectedVertices[i];
+                }
+            }
+        }
+        sourceVertex = temp1->edgeValue;
+    }
+    vertex *temp2 = head;
+    while (temp2 != NULL)
+    {
+        cout << a << " - " << temp2->vertexValue << "  =   " << weight[toDigit(temp2->vertexValue)] << endl;
+        temp2 = temp2->next;
+    }
+}
 
 int Graph::getTotalVertices()
 {
@@ -195,20 +328,24 @@ void Graph::deleteEdge(char value1, char value2)
         }
     }
 }
-void Graph::adjacent(char value)
+void Graph::adjacent(char value, int n)
 {
-    cout << "Adjacent of " << value << " = ";
-    for (vertex *t = head; t != NULL; t = t->next)
+    if (n == 1)
     {
-        if (t->vertexValue == value)
+        
+        cout << "Adjacent of " << getRoom(value,n) << " = ";
+        for (vertex *t = head; t != NULL; t = t->next)
         {
-            for (edge *w = t->adjList; w != NULL; w = w->nextAdj)
+            if (t->vertexValue == value)
             {
-                cout << w->edgeValue << "(" << w->weight << ")"
-                     << " ";
+                for (edge *w = t->adjList; w != NULL; w = w->nextAdj)
+                {
+                    cout << getRoom(w->edgeValue,n) << "(" << w->weight << "), "
+                         << " ";
+                }
+                cout << endl;
+                break;
             }
-            cout << endl;
-            break;
         }
     }
 }
@@ -252,7 +389,7 @@ bool Graph ::checkCycle() // cycles are detected in the graph by using BFS, DFS.
     bool checker = true;
     queue<char> queueObj;
     char *arr = new char[getTotalVertices()];
-    int parent[MAX] = {-1};  //this tells the parent of every node, they are all initialized with -1. because at the start, all nodes are their own parents
+    int parent[MAX] = {-1}; //this tells the parent of every node, they are all initialized with -1. because at the start, all nodes are their own parents
     queueObj.push(head->vertexValue);
     arr[count++] = head->vertexValue;
     while (!queueObj.empty())
@@ -265,10 +402,10 @@ bool Graph ::checkCycle() // cycles are detected in the graph by using BFS, DFS.
         {
             for (int i = 0; i < count; i++)
             {
-                if (arr[i] == tempEdge->edgeValue) //For every visited vertex 'v', if there is an adjacent 'e' such that 'e' is already
-                {                                  //visited and 'e' is not parent of 'v', then there is a cycle in graph
-                    if (parent[tempVertex] != toDigit(tempEdge->edgeValue))  //returns true if the current adjacent vertice 'e' is the parent of vertice
-                    {                                                        // 'v' which means that a cycle is being formed      
+                if (arr[i] == tempEdge->edgeValue)                          //For every visited vertex 'v', if there is an adjacent 'e' such that 'e' is already
+                {                                                           //visited and 'e' is not parent of 'v', then there is a cycle in graph
+                    if (parent[tempVertex] != toDigit(tempEdge->edgeValue)) //returns true if the current adjacent vertice 'e' is the parent of vertice
+                    {                                                       // 'v' which means that a cycle is being formed
                         return true;
                     }
                     checker = false;
@@ -278,7 +415,7 @@ bool Graph ::checkCycle() // cycles are detected in the graph by using BFS, DFS.
             if (checker)
             {
                 queueObj.push(tempEdge->edgeValue);
-                parent[tempEdge->edgeValue] = toDigit(tempVertex);   //sets the current vertice 'v' as the parent of the current adjacent vertice 'e'
+                parent[tempEdge->edgeValue] = toDigit(tempVertex); //sets the current vertice 'v' as the parent of the current adjacent vertice 'e'
                 arr[count++] = tempEdge->edgeValue;
             }
             checker = true;
@@ -306,7 +443,7 @@ Graph Graph::MSTbyKruskals()
             {
                 if (e->weight < minimum) //returns true if the weight of the edge is less than the current minimum
                 {
-                    if (!tempObj.isEdgePresent(v->vertexValue, e->edgeValue)) 
+                    if (!tempObj.isEdgePresent(v->vertexValue, e->edgeValue))
                     {
                         minimum = e->weight;
                         temp1 = v;
@@ -335,33 +472,4 @@ Graph Graph::MSTbyKruskals()
         numOfEdges++;
     }
     return MST;
-}
-
-int main()
-{
-    Graph obj;
-    Graph obj2;
-    obj.insertVertex('A');
-    obj.insertVertex('B');
-    obj.insertVertex('C');
-    obj.insertVertex('D');
-    obj.insertVertex('E');
-    obj.insertVertex('F');
-    // adding edges according to the given graph
-    obj.insertEdge('A', 'B', 7);
-    obj.insertEdge('A', 'C', 8);
-    obj.insertEdge('B', 'C', 3);
-    obj.insertEdge('B', 'D', 6);
-    obj.insertEdge('C', 'E', 3);
-    obj.insertEdge('C', 'D', 4);
-    obj.insertEdge('D', 'E', 2);
-    obj.insertEdge('D', 'F', 5);
-    obj.insertEdge('E', 'F', 2);
-    obj2 = obj.MSTbyKruskals();
-    obj2.adjacent('A'); //displaying adjacent vertices of spanning tree
-    obj2.adjacent('B');
-    obj2.adjacent('C');
-    obj2.adjacent('D');
-    obj2.adjacent('E');
-    obj2.adjacent('F');
 }

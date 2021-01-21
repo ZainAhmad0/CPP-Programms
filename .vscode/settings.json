@@ -8,6 +8,11 @@
         "bitset": "cpp",
         "chrono": "cpp",
         "algorithm": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "new": "cpp"
     }
 }

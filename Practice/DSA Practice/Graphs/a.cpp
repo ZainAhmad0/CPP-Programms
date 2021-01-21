@@ -244,6 +244,9 @@ int Graph ::toDigit(char a)
 
 void Graph::DijiskrasAlgorithm(char sourceVertex)
 {
+
+    // https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
+    // I read the pseudo algo from this site and implemented it
     char a = sourceVertex;
     char selectedVertices[getTotalVertices()];
     char parentSource;
@@ -294,7 +297,8 @@ void Graph::DijiskrasAlgorithm(char sourceVertex)
 int main()
 {
     Graph obj;
-    Graph obj2;
+    cout<<"Zain Ahmad 01-131192-037"<<endl;
+    // Graph obj2;
     obj.insertVertex('A');
     obj.insertVertex('B');
     obj.insertVertex('C');
