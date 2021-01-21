@@ -36,7 +36,7 @@ public:
     void deleteEdge(char, char);
     void adjacent(char,int);
     Graph MSTbyKruskals();
-    void DijiskrasAlgorithm(char sourceVertex);
+    void DijiskrasAlgorithm(int n,char sourceVertex);
     void changeRouteDistances(int n);
     void showRoutes(int n);
 };
@@ -117,11 +117,8 @@ bool Graph ::isAllVerticesPresent(Graph obj)
     return true;
 }
 
-void Graph::DijiskrasAlgorithm(char sourceVertex = 'A')
+void Graph::DijiskrasAlgorithm(int n,char sourceVertex = 'A')
 {
-
-    // https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
-    // I read the pseudo algo from this site and implemented it
     char a = sourceVertex;
     char selectedVertices[getTotalVertices()];
     char parentSource;
@@ -164,7 +161,7 @@ void Graph::DijiskrasAlgorithm(char sourceVertex = 'A')
     vertex *temp2 = head;
     while (temp2 != NULL)
     {
-        cout << a << " - " << temp2->vertexValue << "  =   " << weight[toDigit(temp2->vertexValue)] << endl;
+        cout << getRoom(a,n) << " - " << getRoom(temp2->vertexValue,n) << "  =   " << weight[toDigit(temp2->vertexValue)] << endl;
         temp2 = temp2->next;
     }
 }

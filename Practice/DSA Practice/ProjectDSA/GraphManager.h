@@ -83,19 +83,20 @@ void GraphManager ::showShortestRouteToEachLocation(int n)
 {
     if (n == 1)
     {
-        objEE.DijiskrasAlgorithm();
+        objEE.DijiskrasAlgorithm(n);
     }
     else if (n == 2)
     {
-        objSE.DijiskrasAlgorithm();
+        objSE.DijiskrasAlgorithm(n);
     }
     else if (n == 3)
     {
-        objCE.DijiskrasAlgorithm();
+        objCE.DijiskrasAlgorithm(n);
     }
     else if (n == 4)
     {
-        objCS.DijiskrasAlgorithm();
+        objCS.DijiskrasAlgorithm(n);
     }
+    cout<<endl;
     return;
 }

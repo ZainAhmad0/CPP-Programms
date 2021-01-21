@@ -837,7 +837,7 @@ void adminLogin(GraphManager obj)
 	}
 }
 
-void associatedFacultyLogin(int x1)
+void associatedFacultyLogin(int x1, GraphManager obj)
 {
 	int x = x1;
 	string userName, password;
@@ -852,10 +852,11 @@ void associatedFacultyLogin(int x1)
 			 << endl;
 		while (c != 4)
 		{
-			cout << "\nPress 1 to display the routes" << endl;
-			cout << "Press 2 to view blocks reserved for each departement" << endl;
+			cout << "\nPress 1 to display the shortest route possible" << endl;
+			cout << "Press 2 to display the shortest route possible to each location" << endl;
 			cout << "Press 3 to change your personal data" << endl;
-			cout << "Press 4 to sign out" << endl;
+			cout << "Press 4 to view blocks reserved for each departement" << endl;
+			cout << "Press 5 to sign out" << endl;
 			while (!(cin >> c))
 			{
 				cout << "Only Numeric inputs allowed! Re-enter : ";
@@ -864,20 +865,25 @@ void associatedFacultyLogin(int x1)
 			}
 			if (c == 1)
 			{
-				cout << "." << endl;
+				obj.showRoute(x1);
 			}
-
-			else if (c == 2)
+			else if (c == 4)
 			{
 				blockDisplay();
 			}
-
+			else if (c == 2)
+			{
+				cout<<endl;
+				obj.showShortestRouteToEachLocation(x1);
+				cout<<endl;
+				obj.showRoute(x1);
+			}
 			else if (c == 3)
 			{
 				int x = 2;
 				changeData(x);
 			}
-			else if (c == 4)
+			else if (c == 5)
 			{
 				cout << "." << endl;
 			}
@@ -893,7 +899,7 @@ void associatedFacultyLogin(int x1)
 	}
 }
 
-void facultyLogin()
+void facultyLogin(GraphManager obj)
 {
 	int ch;
 	cout << "\nFor Which department you want to login" << endl;
@@ -909,19 +915,19 @@ void facultyLogin()
 	}
 	if (ch == 1)
 	{
-		associatedFacultyLogin(1);
+		associatedFacultyLogin(1, obj);
 	}
 	else if (ch == 2)
 	{
-		associatedFacultyLogin(2);
+		associatedFacultyLogin(2, obj);
 	}
 	else if (ch == 3)
 	{
-		associatedFacultyLogin(3);
+		associatedFacultyLogin(3, obj);
 	}
 	else if (ch == 4)
 	{
-		associatedFacultyLogin(4);
+		associatedFacultyLogin(4, obj);
 	}
 	else
 	{
@@ -968,7 +974,7 @@ int main()
 			}
 			else if (choice == 2)
 			{
-				facultyLogin();
+				facultyLogin(objManager);
 			}
 			else if (choice == 3)
 			{
