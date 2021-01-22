@@ -34,16 +34,16 @@ public:
     void deleteVertex(char);
     void insertEdge(char, char, int);
     void deleteEdge(char, char);
-    void adjacent(char,int);
+    void adjacent(char, int);
     Graph MSTbyKruskals();
-    void DijiskrasAlgorithm(int n,char sourceVertex);
+    void DijiskrasAlgorithm(int n, char sourceVertex);
     void changeRouteDistances(int n);
     void showRoutes(int n);
 };
 
 string Graph ::getRoom(char a, int n)
 {
-    if (n == 1)
+    if (n == 1)// for EE
     {
         switch (a)
         {
@@ -60,28 +60,86 @@ string Graph ::getRoom(char a, int n)
         default:
             break;
         }
-        return " ";
     }
+    else if (n == 2)// for SE
+    {
+        switch (a)
+        {
+        case 'A':
+            return "Auditorium";
+        case 'B':
+            return "NC-01";
+        case 'C':
+            return "XC-02";
+        case 'D':
+            return "OC-09";
+        case 'E':
+            return "NC-14";
+        default:
+            break;
+        }
+    }
+    else if (n == 3) // for CE
+    {
+        switch (a)
+        {
+        case 'A':
+            return "Auditorium";
+        case 'B':
+            return "XC-08";
+        case 'C':
+            return "NC-12";
+        case 'D':
+            return "OC-01";
+        case 'E':
+            return "HL-14";
+        default:
+            break;
+        }
+    }
+    else if (n == 4) // for CS
+    {
+        switch (a)
+        {
+        case 'A':
+            return "Auditorium";
+        case 'B':
+            return "HL-10";
+        case 'C':
+            return "XC-10";
+        case 'D':
+            return "NC-09";
+        case 'E':
+            return "OC-02";
+        default:
+            break;
+        }
+    }
+    return " ";
 }
 
 void Graph ::showRoutes(int n)
 {
-    vertex *temp = head;
+    vertex *temp=new vertex;
+    temp=head;
     while (temp != NULL)
     {
-        adjacent(temp->vertexValue,n);
-        cout<<endl;
+        adjacent(temp->vertexValue, n);
+        cout << endl;
         temp = temp->next;
     }
+    delete temp;
 }
 
 void Graph ::changeRouteDistances(int n)
 {
-    cout << "Initially The following route distances are defined" << endl<<endl;
+    cout << "Initially The following route distances are defined" << endl
+         << endl;
     vertex *temp = head;
     edge *edgeTemp = head->adjList;
     showRoutes(n);
-    cout << "You are requested to please enter the new route distances " << endl<<endl;
+    cout << "You are requested to please enter the new route distances " << endl
+         << endl;
     temp = head;
     int newDist;
     while (temp != NULL)
@@ -89,16 +147,17 @@ void Graph ::changeRouteDistances(int n)
         edgeTemp = temp->adjList;
         while (edgeTemp != NULL)
         {
-            cout << "Current Distance from " << getRoom(temp->vertexValue,n) << " to " << getRoom(edgeTemp->edgeValue,n) << " is " << edgeTemp->weight << endl;
+            cout << "Current Distance from " << getRoom(temp->vertexValue, n) << " to " << getRoom(edgeTemp->edgeValue, n) << " is " << edgeTemp->weight << endl;
             cout << "Enter New Distance : ";
             cin >> newDist;
             edgeTemp->weight = newDist;
-            edgeTemp=edgeTemp->nextAdj;
+            edgeTemp = edgeTemp->nextAdj;
         }
         cout << endl;
         temp = temp->next;
     }
-    cout << "Now the route with changed distances is" << endl<<endl;
+    cout << "Now the route with changed distances is" << endl
+         << endl;
     showRoutes(n);
 }
 
@@ -117,7 +176,7 @@ bool Graph ::isAllVerticesPresent(Graph obj)
     return true;
 }
 
-void Graph::DijiskrasAlgorithm(int n,char sourceVertex = 'A')
+void Graph::DijiskrasAlgorithm(int n, char sourceVertex = 'A')
 {
     char a = sourceVertex;
     char selectedVertices[getTotalVertices()];
@@ -161,7 +220,7 @@ void Graph::DijiskrasAlgorithm(int n,char sourceVertex = 'A')
     vertex *temp2 = head;
     while (temp2 != NULL)
     {
-        cout << getRoom(a,n) << " - " << getRoom(temp2->vertexValue,n) << "  =   " << weight[toDigit(temp2->vertexValue)] << endl;
+        cout << getRoom(a, n) << " - " << getRoom(temp2->vertexValue, n) << "  =   " << weight[toDigit(temp2->vertexValue)] << endl;
         temp2 = temp2->next;
     }
 }
@@ -327,24 +386,20 @@ void Graph::deleteEdge(char value1, char value2)
 }
 void Graph::adjacent(char value, int n)
 {
-    if (n == 1)
-    {
-        
-        cout << "Adjacent of " << getRoom(value,n) << " = ";
+        cout << "Adjacent of " << getRoom(value, n) << " = ";
         for (vertex *t = head; t != NULL; t = t->next)
         {
             if (t->vertexValue == value)
             {
                 for (edge *w = t->adjList; w != NULL; w = w->nextAdj)
                 {
-                    cout << getRoom(w->edgeValue,n) << "(" << w->weight << "), "
+                    cout << getRoom(w->edgeValue, n) << "(" << w->weight << "), "
                          << " ";
                 }
                 cout << endl;
                 break;
             }
         }
-    }
 }
 
 bool Graph::isVertexPresent(char value)

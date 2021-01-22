@@ -16,31 +16,8 @@ void blockDisplay()
 	cout << "1)XC-8\n2)NC-12\n3)OC-1\n4)HL-14\n"
 		 << endl;
 	cout << "Blocks Reserved for CS Department are : " << endl;
-	cout << "1)XC-10\n2)NC-12\n3)OC-2\n4)HL-10\n"
+	cout << "1)XC-10\n2)NC-9\n3)OC-2\n4)HL-10\n"
 		 << endl;
-}
-
-string getRoom(char a, int n)
-{
-	if (n == 1)
-	{
-		switch (a)
-		{
-		case 'A':
-			return "Auditorium";
-		case 'B':
-			return "NC-02";
-		case 'C':
-			return "XC-01";
-		case 'D':
-			return "HL-04";
-		case 'E':
-			return "OC-03";
-		default:
-			break;
-		}
-		return " ";
-	}
 }
 
 void changeData(int x)
@@ -850,7 +827,7 @@ void associatedFacultyLogin(int x1, GraphManager obj)
 		int c = 0;
 		cout << "\n\t\tWelcome to Faculy Portal\n"
 			 << endl;
-		while (c != 4)
+		while (c != 5)
 		{
 			cout << "\nPress 1 to display the shortest route possible" << endl;
 			cout << "Press 2 to display the shortest route possible to each location" << endl;
@@ -873,9 +850,9 @@ void associatedFacultyLogin(int x1, GraphManager obj)
 			}
 			else if (c == 2)
 			{
-				cout<<endl;
+				cout << endl;
 				obj.showShortestRouteToEachLocation(x1);
-				cout<<endl;
+				cout << endl;
 				obj.showRoute(x1);
 			}
 			else if (c == 3)

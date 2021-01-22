@@ -5,6 +5,6 @@ ee
 s
 ss
 c
-cc
+ce
 cs
 css
