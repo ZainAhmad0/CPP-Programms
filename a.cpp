@@ -1,41 +1,37 @@
 #include <iostream>
+#include <string>
+#include <string.h>
+#include <cstring>
 using namespace std;
 
-int Binary(int x[], int n, int key)
+
+int toDigit(char a)
 {
-    int low = 0;
-    int mid;
-    int hi = n - 1;
-    while (low <= hi)
-    {
-        mid = (low + hi) / 2;
-        if (key == x[mid])
-            return (mid);
-        if (key < x[mid])
-            hi = mid - 1;
-        else
-            low = mid + 1;
-    }
-    low = mid + 1;
-    return -1;
+    return (a-'0');
 }
+
+for()
 
 int main()
 {
-    int a = 10;
-    cout << "Zain Ahmad 01-131192-037" << endl;
-    int array[a];
-    for (int i = 0; i < a; i++)
+    char arr1[50];
+    char arr2[50];
+    char a;
+    while(a!='\n')
     {
-        array[i] = rand() % 10000;
+        cin>>a;
+        if(a!='/'&& a!=)
+        {
+            int a[i]=toDigit(a);
+            flag =false;
+        }
+        //65456
     }
-    double dif;
-    time_t start, end;
-    time(&start);
-    int b = Binary(array, a, 2324);
-    time(&end);
-    dif = difftime(end, start);
-    cout << "Found at " << b << endl;
-    cout << "Execution time  : " << dif << endl;
-    return 0;
+    
+    while(a!='\n')
+    {
+        cin>>a;
+        if
+        //56432
+    }
 }
