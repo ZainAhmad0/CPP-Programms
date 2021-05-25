@@ -14,6 +14,16 @@
         "unordered_map": "cpp",
         "unordered_set": "cpp",
         "new": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "random": "cpp",
+        "string_view": "cpp",
+        "regex": "cpp",
+        "functional": "cpp",
+        "future": "cpp",
+        "istream": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp",
+        "memory": "cpp",
+        "variant": "cpp"
     }
 }

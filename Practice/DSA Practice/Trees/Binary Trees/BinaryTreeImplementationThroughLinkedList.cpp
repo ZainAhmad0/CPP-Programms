@@ -323,14 +323,17 @@ bool BinaryTree<BT>::search(BT key, Node<BT> *leaf)
     {
         if (key == leaf->value)
         {
+            cout<<leaf->value<<", ";
             return true;
         }
         if (key < leaf->value)
         {
+            cout<<leaf->value<<", ";
             return search(key, leaf->left);
         }
         else
         {
+            cout<<leaf->value<<", ";
             return search(key, leaf->right);
         }
     }
@@ -446,11 +449,15 @@ void BinaryTree<BT>::levelOrderPrint()
 int main()
 {
     BinaryTree<int> obj;
-    obj.insert(8);
-    obj.insert(3);
-    obj.insert(10);
-    obj.insert(1);
-    obj.insert(6);
+    // obj.insert(8);
+    // obj.insert(3);
+    // obj.insert(10);
+    // obj.insert(1);
+    // obj.insert(6);
+    for(int i=1; i<101; i++){
+        obj.insert(i);
+    }
+    obj.search(92);
     // cout << "Number of leaves : " << obj.getNumberOfLeaves() << endl;
     // cout << "Deepest Node is : " << obj.getDeepestNode() << endl;
     // cout << "Height : " << obj.getHeight() << endl;
@@ -458,11 +465,11 @@ int main()
     // cout<<"Size of Tree is : "<<obj.sizeOfBinaryTree()<<endl;
     // cout<<"Min is : "<<obj.findMin()<<endl;
     // cout<<"Max is : "<<obj.findMax()<<endl;
-    cout << "Inorder Traversal : ";
-    obj.inorderPrint();
-    obj.deleteElement(3);
-    cout << "Inorder Traversal : ";
-    obj.inorderPrint();
+    // cout << "Inorder Traversal : ";
+    // obj.inorderPrint();
+    // obj.deleteElement(3);
+    // cout << "Inorder Traversal : ";
+    // obj.inorderPrint();
     // cout << "Postorder Traversal : ";
     // obj.postorderPrint();
     // cout << "Preorder Traversal : ";

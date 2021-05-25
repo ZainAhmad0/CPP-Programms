@@ -77,14 +77,31 @@ void createDescendingArrays(int *&arr1, int *&arr2, int *&arr3, int *&arr4, cons
 
 int main()
 {
+    int compCount, moveCount;
+    compCount = moveCount = 0;
 
-    const int size = 10;
-    int *arr1 = new int[size];
-    int *arr2 = new int[size];
-    int *arr3 = new int[size];
-    int *arr4 = new int[size];
-    createRandomArrays(arr1, arr2, arr3, arr4, size);
-    createAscendingArrays(arr1, arr2, arr3, arr4, size);
-    createDescendingArrays(arr1, arr2, arr3, arr4, size);
+    const int size = 16;
+    int arr1[] = {12, 7, 11, 18, 19, 9, 6, 14, 21, 3, 17, 20, 5, 12, 14, 8};
+    int arr2[] = {12, 7, 11, 18, 19, 9, 6, 14, 21, 3, 17, 20, 5, 12, 14, 8};
+    int arr3[] = {12, 7, 11, 18, 19, 9, 6, 14, 21, 3, 17, 20, 5, 12, 14, 8};
+    int arr4[] = {12, 7, 11, 18, 19, 9, 6, 14, 21, 3, 17, 20, 5, 12, 14, 8};
+    Sorting obj;
+    obj.selectionSort(arr1, size, compCount, moveCount);
+    cout << "Selection sort" << endl;
+    displayArray(arr1, size);
+    cout << "Comparison = " << compCount << " & Data moves = " << moveCount << endl;
+    compCount = moveCount = 0;
+    obj.mergeSort(arr2, size, compCount, moveCount);
+    cout << "Merge sort" << endl;
+    displayArray(arr2, size);
+    cout << "Comparison = " << compCount << " & Data moves = " << moveCount << endl;
+    compCount = moveCount = 0;
+    obj.quickSort(arr3, size, compCount, moveCount);
+    cout << "Quick sort" << endl;
+    displayArray(arr3, size);
+    cout << "Comparison = " << compCount << " & Data moves = " << moveCount << endl;
+    cout << "Radix sort" << endl;
+    obj.radixSort(arr4, size);
+    displayArray(arr4, size);
     return 0;
 }
